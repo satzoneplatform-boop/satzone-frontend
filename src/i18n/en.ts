@@ -894,6 +894,18 @@ export const en = {
   'landing.hero.subjectRW': 'Reading & Writing',
   'landing.hero.streakDays': 'day streak',
   'landing.hero.streakCaption': 'Consistency pays off',
+  // Comma-separated first names for the map result pops (sample data)
+  'landing.hero.popNames':
+    'Aziza,Jasur,Madina,Sardor,Nilufar,Timur,Dilnoza,Bekzod,Kamola,Ulugbek',
+  // Summit band — the mountain-climb visual under the hero
+  'landing.summit.title': 'Reach your dream score',
+  'landing.summit.subtitle':
+    'From your first mock to test day — every session is one step higher up the mountain.',
+  // Demo band — the MacBook video player
+  'landing.demo.title': 'See SATZONE in action',
+  'landing.demo.subtitle':
+    'A quick tour of the platform — lessons, mock tests, and the analytics that guide your plan.',
+  'landing.demo.play': 'Watch the demo',
   'landing.metrics.title': 'Trusted by ambitious students',
   'landing.metrics.students': 'Active students',
   'landing.metrics.avgGain': 'Avg. score gain',

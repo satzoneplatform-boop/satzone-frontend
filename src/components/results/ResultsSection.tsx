@@ -31,16 +31,16 @@ export function ResultsSection() {
   });
 
   return (
-    <section id="results" className="relative overflow-hidden bg-gradient-to-b from-ink-50 via-ink-50/40 to-white py-24">
-      <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+    <section id="results" className="relative overflow-hidden py-24 text-white">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <Reveal className="mx-auto max-w-2xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-wider text-brand-600">
+          <p className="text-sm font-semibold uppercase tracking-wider text-brand-300">
             {t('landing.results.eyebrow')}
           </p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight text-navy-900 sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
             {t('landing.results.title')}
           </h2>
-          <p className="mt-4 text-base text-ink-500">{t('landing.results.subtitle')}</p>
+          <p className="mt-4 text-base text-white/60">{t('landing.results.subtitle')}</p>
         </Reveal>
 
         {/* University acceptances — featured spotlight */}
@@ -91,11 +91,11 @@ export function ResultsSection() {
 function SubHeading({ children }: { children: React.ReactNode }) {
   return (
     <div className="mb-8 flex items-center justify-center gap-4">
-      <span className="h-px w-10 bg-ink-200 sm:w-16" aria-hidden />
-      <h3 className="text-center text-xl font-bold tracking-tight text-navy-900 sm:text-2xl">
+      <span className="h-px w-10 bg-white/15 sm:w-16" aria-hidden />
+      <h3 className="text-center text-xl font-bold tracking-tight text-white sm:text-2xl">
         {children}
       </h3>
-      <span className="h-px w-10 bg-ink-200 sm:w-16" aria-hidden />
+      <span className="h-px w-10 bg-white/15 sm:w-16" aria-hidden />
     </div>
   );
 }
@@ -103,7 +103,7 @@ function SubHeading({ children }: { children: React.ReactNode }) {
 function ErrorBlock({ message, onRetry, retryLabel }: { message: string; onRetry: () => void; retryLabel: string }) {
   return (
     <StateBlock>
-      <p className="text-sm text-ink-500">{message}</p>
+      <p className="text-sm text-white/55">{message}</p>
       <Button size="sm" variant="secondary" className="mt-4" onClick={onRetry}>
         {retryLabel}
       </Button>
@@ -114,14 +114,14 @@ function ErrorBlock({ message, onRetry, retryLabel }: { message: string; onRetry
 function EmptyBlock({ message }: { message: string }) {
   return (
     <StateBlock>
-      <p className="text-sm text-ink-500">{message}</p>
+      <p className="text-sm text-white/55">{message}</p>
     </StateBlock>
   );
 }
 
 function StateBlock({ children }: { children: React.ReactNode }) {
   return (
-    <div className="grid place-items-center rounded-3xl border border-dashed border-ink-200 bg-white/60 px-6 py-20 text-center">
+    <div className="grid place-items-center rounded-3xl border border-dashed border-white/15 bg-white/[0.03] px-6 py-20 text-center">
       <div>{children}</div>
     </div>
   );

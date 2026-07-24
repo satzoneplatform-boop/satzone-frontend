@@ -79,7 +79,7 @@ export function UniversitySpotlight({ results }: { results: UniversityResult[] }
       </div>
 
       {/* Spotlight stage */}
-      <div className="lp-card mt-6 overflow-hidden rounded-3xl border border-ink-200 bg-white shadow-[var(--shadow-card)]">
+      <div className="lp-card mt-6 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] shadow-[0_28px_70px_-30px_rgb(2_6_23/0.8)] backdrop-blur">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={active.id}
@@ -97,9 +97,9 @@ export function UniversitySpotlight({ results }: { results: UniversityResult[] }
                 alt={t('landing.results.photoAlt', { name: active.studentName })}
                 className="aspect-[4/3] w-full md:absolute md:inset-0 md:aspect-auto md:h-full"
               />
-              <figcaption className="absolute inset-x-4 bottom-4 flex items-baseline justify-between gap-3 rounded-2xl bg-white/95 px-4 py-3 shadow-[var(--shadow-dropdown)] backdrop-blur">
-                <span className="truncate text-lg font-bold text-navy-900">{active.studentName}</span>
-                <span className="shrink-0 text-sm font-semibold text-ink-400">{active.country}</span>
+              <figcaption className="absolute inset-x-4 bottom-4 flex items-baseline justify-between gap-3 rounded-2xl border border-white/10 bg-navy-900/85 px-4 py-3 shadow-[var(--shadow-dropdown)] backdrop-blur">
+                <span className="truncate text-lg font-bold text-white">{active.studentName}</span>
+                <span className="shrink-0 text-sm font-semibold text-white/50">{active.country}</span>
               </figcaption>
             </figure>
 
@@ -107,7 +107,7 @@ export function UniversitySpotlight({ results }: { results: UniversityResult[] }
                 can be showcased before any acceptance comes in. */}
             <div className="flex flex-col p-6 sm:p-10 md:text-center">
               {active.acceptanceStatus && (
-                <p className="mb-6 text-xs font-semibold uppercase tracking-[0.2em] text-brand-600">
+                <p className="mb-6 text-xs font-semibold uppercase tracking-[0.2em] text-brand-300">
                   {active.acceptanceStatus}
                 </p>
               )}
@@ -124,47 +124,47 @@ export function UniversitySpotlight({ results }: { results: UniversityResult[] }
                         onError={(e) => (e.currentTarget.style.display = 'none')}
                       />
                     ) : (
-                      <span className="grid size-16 place-items-center rounded-2xl bg-brand-50 text-brand-600 sm:size-20">
+                      <span className="grid size-16 place-items-center rounded-2xl bg-brand-500/15 text-brand-300 sm:size-20">
                         <CapIcon className="size-9" />
                       </span>
                     )}
                     {active.universityName && (
-                      <p className="text-xl font-bold text-navy-900">{active.universityName}</p>
+                      <p className="text-xl font-bold text-white">{active.universityName}</p>
                     )}
                   </div>
 
-                  <hr className="my-6 border-ink-100 sm:my-8" />
+                  <hr className="my-6 border-white/10 sm:my-8" />
                 </>
               )}
 
-              <div className="grid grid-cols-2 divide-x divide-ink-100">
+              <div className="grid grid-cols-2 divide-x divide-white/10">
                 <div className="pr-4">
-                  <p className="text-4xl font-extrabold tracking-tight text-navy-900 sm:text-5xl">
+                  <p className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
                     <CountUp to={active.overallScore} />
                   </p>
-                  <p className="mt-1.5 text-xs font-semibold uppercase tracking-wide text-ink-500">
+                  <p className="mt-1.5 text-xs font-semibold uppercase tracking-wide text-white/50">
                     {t('landing.results.overall')}
                   </p>
                 </div>
                 <div className="flex flex-col justify-center pl-4">
-                  <p className="text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">
+                  <p className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
                     {active.country}
                   </p>
-                  <p className="mt-1.5 text-xs font-semibold uppercase tracking-wide text-ink-500">
+                  <p className="mt-1.5 text-xs font-semibold uppercase tracking-wide text-white/50">
                     {t('landing.results.country')}
                   </p>
                 </div>
               </div>
 
               {active.testimonial && (
-                <blockquote className="mt-6 border-l-2 border-brand-500 pl-4 text-left text-base italic leading-relaxed text-ink-600 sm:mt-8 md:mx-auto md:max-w-md">
+                <blockquote className="mt-6 border-l-2 border-brand-400 pl-4 text-left text-base italic leading-relaxed text-white/70 sm:mt-8 md:mx-auto md:max-w-md">
                   “{active.testimonial}”
                 </blockquote>
               )}
 
               {count > 1 && (
                 <div className="mt-8 flex items-center justify-between gap-4 pt-2 md:mt-auto">
-                  <p className="text-sm font-medium tabular-nums text-ink-400">
+                  <p className="text-sm font-medium tabular-nums text-white/40">
                     {index + 1} / {count}
                   </p>
                   <div className="flex gap-2">
@@ -172,7 +172,7 @@ export function UniversitySpotlight({ results }: { results: UniversityResult[] }
                       type="button"
                       onClick={() => go(-1)}
                       aria-label={t('landing.results.prev')}
-                      className="grid size-11 place-items-center rounded-full border border-ink-200 text-ink-600 transition-colors hover:border-brand-300 hover:bg-brand-50 hover:text-brand-600"
+                      className="grid size-11 place-items-center rounded-full border border-white/15 text-white/70 transition-colors hover:border-accent-400/50 hover:bg-white/10 hover:text-white"
                     >
                       <ChevronLeftIcon className="size-5" />
                     </button>
@@ -180,7 +180,7 @@ export function UniversitySpotlight({ results }: { results: UniversityResult[] }
                       type="button"
                       onClick={() => go(1)}
                       aria-label={t('landing.results.next')}
-                      className="grid size-11 place-items-center rounded-full border border-ink-200 text-ink-600 transition-colors hover:border-brand-300 hover:bg-brand-50 hover:text-brand-600"
+                      className="grid size-11 place-items-center rounded-full border border-white/15 text-white/70 transition-colors hover:border-accent-400/50 hover:bg-white/10 hover:text-white"
                     >
                       <ChevronRightIcon className="size-5" />
                     </button>

@@ -863,6 +863,18 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'landing.hero.scoreLabel': 'SAT prognozi',
   'landing.hero.scoreDelta': '8 haftada +180 ball',
   'landing.hero.scoreCaption': '1500+ maqsad sari yoʻldasiz',
+  // Comma-separated first names for the map result pops (sample data)
+  'landing.hero.popNames':
+    'Aziza,Jasur,Madina,Sardor,Nilufar,Temur,Dilnoza,Bekzod,Kamola,Ulugʻbek',
+  // Summit band — the mountain-climb visual under the hero
+  'landing.summit.title': 'Orzudagi ballga erishing',
+  'landing.summit.subtitle':
+    'Birinchi sinov testidan imtihon kunigacha — har bir mashgʻulot sizni bir pogʻona yuqoriga koʻtaradi.',
+  // Demo band — the MacBook video player
+  'landing.demo.title': 'SATZONEʼni amalda koʻring',
+  'landing.demo.subtitle':
+    'Platforma boʻylab qisqa sayohat — darslar, sinov testlari va rejangizni boshqaradigan tahlillar.',
+  'landing.demo.play': 'Demoni koʻrish',
   'landing.metrics.title': 'Ambitsiyali oʻquvchilar ishonadi',
   'landing.metrics.students': 'Faol oʻquvchilar',
   'landing.metrics.avgGain': 'Oʻrtacha ball oʻsishi',

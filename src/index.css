@@ -244,6 +244,34 @@
   to   { transform: translateX(-50%); }
 }
 
+/* Expanding sonar ring for map city nodes / chart endpoints. */
+@keyframes lp-node-ping {
+  0%   { transform: scale(0.4); opacity: 0.9; }
+  70%  { transform: scale(2.4); opacity: 0; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* Dash segment traveling start → end of a pathLength=100 path. */
+@keyframes lp-dash-travel {
+  from { stroke-dashoffset: 100; }
+  to   { stroke-dashoffset: 0; }
+}
+
+/* Tiny star that blinks in and out. */
+@keyframes lp-twinkle {
+  0%,
+  100% { opacity: 0; transform: scale(0.4); }
+  50%  { opacity: 1; transform: scale(1); }
+}
+
+/* Ambient spot drifting from the bottom of the viewport to the top. */
+@keyframes lp-spot-rise {
+  0%   { transform: translateY(0); opacity: 0; }
+  6%   { opacity: 0.65; }
+  90%  { opacity: 0.35; }
+  100% { transform: translateY(-112vh); opacity: 0; }
+}
+
 @layer utilities {
   /* ---- Animated blurred gradient orbs -------------------------------- */
   .lp-orb {
@@ -266,6 +294,18 @@
     background-size: 180% 180%, 170% 170%, 200% 200%;
     animation: lp-mesh-pan 26s ease-in-out infinite;
     will-change: background-position;
+  }
+
+  /* ---- Page-wide drifting spots (dark theme ambience) ------------------ */
+  .lp-spot {
+    position: absolute;
+    bottom: -14px;
+    border-radius: 9999px;
+    background: rgb(255 255 255 / 0.55);
+    box-shadow: 0 0 10px 2px rgb(31 168 248 / 0.5);
+    animation: lp-spot-rise linear infinite;
+    will-change: transform, opacity;
+    pointer-events: none;
   }
 
   /* ---- Floating particles -------------------------------------------- */
@@ -363,6 +403,66 @@
   .lp-tree-glow {
     filter: drop-shadow(0 0 6px rgb(56 189 248 / 0.45))
       drop-shadow(0 0 20px rgb(37 99 235 / 0.3));
+  }
+
+  /* ---- Neon Uzbekistan map (hero signature) --------------------------- */
+  .lp-map-glow {
+    filter: drop-shadow(0 0 5px rgb(56 189 248 / 0.55))
+      drop-shadow(0 0 18px rgb(31 168 248 / 0.35));
+  }
+  /* SVG circles pulsing like sonar; transform-box keeps scaling local. */
+  .lp-node-ping {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: lp-node-ping 2.8s ease-out infinite;
+  }
+  .lp-growth-glow {
+    filter: drop-shadow(0 0 6px rgb(31 168 248 / 0.5));
+  }
+  /* Bright pulse that rides the growth line on an endless loop. */
+  .lp-growth-pulse {
+    stroke-dasharray: 7 93;
+    animation: lp-dash-travel 6s linear infinite;
+  }
+
+  /* ---- Instructor photo: neon line circling the frame ------------------ */
+  /* SVG2 geometry-as-CSS keeps the rect hugging the frame at any size. */
+  .lp-frame-rect {
+    x: 2px;
+    y: 2px;
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    rx: 22px;
+    fill: none;
+  }
+  .lp-frame-dash {
+    stroke: var(--color-accent-400);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-dasharray: 12 88;
+    animation: lp-dash-travel 9s linear infinite;
+  }
+  /* White head riding the leading edge of the cyan tail (−9.5 units at
+     0.09 s/unit ≈ −0.855 s). */
+  .lp-frame-dash-head {
+    stroke: #fff;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-dasharray: 2.5 97.5;
+    animation: lp-dash-travel 9s linear infinite;
+    animation-delay: -0.855s;
+  }
+  .lp-sparkle {
+    animation: lp-twinkle 2.6s ease-in-out infinite;
+    will-change: transform, opacity;
+    pointer-events: none;
+  }
+
+  /* ---- Summit score: dreamy neon halo around the big number ------------ */
+  .lp-score-glow {
+    text-shadow:
+      0 0 24px rgb(31 168 248 / 0.55),
+      0 0 64px rgb(37 99 235 / 0.4);
   }
 
   /* ---- Infinite marquee strip ----------------------------------------- */

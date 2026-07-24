@@ -20,7 +20,7 @@ export function MathImprovementCard({ result }: { result: MathResult }) {
     <motion.figure
       whileHover={reduce ? undefined : { y: -8 }}
       transition={{ type: 'spring', stiffness: 300, damping: 24 }}
-      className="lp-card group flex h-full flex-col overflow-hidden rounded-3xl border border-ink-200 bg-white shadow-[var(--shadow-card)] hover:border-brand-200 hover:shadow-[var(--shadow-card-hover)]"
+      className="lp-card group flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] shadow-[0_20px_50px_-24px_rgb(2_6_23/0.8)] backdrop-blur hover:border-white/20 hover:bg-white/[0.06]"
     >
       <div className="relative">
         <ResultPhoto
@@ -42,16 +42,16 @@ export function MathImprovementCard({ result }: { result: MathResult }) {
 
       <div className="flex flex-1 flex-col p-6">
         {/* Hero: the improvement */}
-        <div className="relative overflow-hidden rounded-2xl border border-brand-100 bg-gradient-to-br from-brand-50 via-white to-accent-50 p-4">
+        <div className="relative overflow-hidden rounded-2xl border border-brand-500/25 bg-gradient-to-br from-brand-500/15 via-transparent to-accent-500/10 p-4">
           <div className="flex items-center gap-3">
             <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-brand-500 to-accent-500 text-white shadow-[0_8px_20px_-6px_rgb(31_168_248/0.6)]">
               <TrendingUpIcon className="size-6" />
             </span>
             <div className="leading-none">
-              <p className="bg-gradient-to-br from-brand-600 to-accent-600 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent">
+              <p className="bg-gradient-to-br from-brand-300 to-accent-400 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent">
                 <CountUp to={result.improvement} prefix="+" />
               </p>
-              <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-ink-500">
+              <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-white/50">
                 {t('landing.results.improvement')} · {t('landing.results.points')}
               </p>
             </div>
@@ -64,7 +64,7 @@ export function MathImprovementCard({ result }: { result: MathResult }) {
             label={t('landing.results.before')}
             value={result.mathBefore}
             max={MAX_MATH}
-            fillClassName="bg-ink-300"
+            fillClassName="bg-white/25"
           />
           <ScoreRow
             label={t('landing.results.after')}
@@ -76,7 +76,7 @@ export function MathImprovementCard({ result }: { result: MathResult }) {
         </div>
 
         {result.testimonial && (
-          <blockquote className="mt-5 line-clamp-3 text-sm leading-relaxed text-ink-600">
+          <blockquote className="mt-5 line-clamp-3 text-sm leading-relaxed text-white/65">
             “{result.testimonial}”
           </blockquote>
         )}
@@ -101,12 +101,12 @@ function ScoreRow({
   return (
     <div>
       <div className="mb-1 flex items-center justify-between text-sm">
-        <span className="text-ink-500">{label}</span>
-        <span className={emphasize ? 'font-bold text-navy-900' : 'font-semibold text-ink-600'}>
+        <span className="text-white/55">{label}</span>
+        <span className={emphasize ? 'font-bold text-white' : 'font-semibold text-white/70'}>
           <CountUp to={value} />
         </span>
       </div>
-      <ProgressBar value={value} max={max} fillClassName={fillClassName} />
+      <ProgressBar value={value} max={max} trackClassName="bg-white/10" fillClassName={fillClassName} />
     </div>
   );
 }

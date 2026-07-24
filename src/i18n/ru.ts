@@ -863,6 +863,18 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'landing.hero.scoreLabel': 'Прогноз SAT',
   'landing.hero.scoreDelta': '+180 баллов за 8 недель',
   'landing.hero.scoreCaption': 'Уверенно к цели 1500+',
+  // Comma-separated first names for the map result pops (sample data)
+  'landing.hero.popNames':
+    'Азиза,Жасур,Мадина,Сардор,Нилуфар,Тимур,Дильноза,Бекзод,Камола,Улугбек',
+  // Summit band — the mountain-climb visual under the hero
+  'landing.summit.title': 'Достигните балла мечты',
+  'landing.summit.subtitle':
+    'От первого пробного теста до дня экзамена — каждое занятие поднимает вас на шаг выше.',
+  // Demo band — the MacBook video player
+  'landing.demo.title': 'Посмотрите SATZONE в действии',
+  'landing.demo.subtitle':
+    'Короткая экскурсия по платформе — уроки, пробные тесты и аналитика, которая ведёт ваш план.',
+  'landing.demo.play': 'Смотреть демо',
   'landing.metrics.title': 'Нам доверяют амбициозные ученики',
   'landing.metrics.students': 'Активных учеников',
   'landing.metrics.avgGain': 'Средний прирост балла',

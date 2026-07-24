@@ -6,7 +6,7 @@ import { Skeleton } from '@/components/ui/Skeleton';
  */
 export function ResultCardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-3xl border border-ink-200 bg-white shadow-[var(--shadow-card)]">
+    <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] backdrop-blur">
       <Skeleton className="aspect-[4/3] w-full rounded-none" />
       <div className="space-y-4 p-6">
         <Skeleton className="h-5 w-2/3" />
