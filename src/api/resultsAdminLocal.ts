@@ -16,13 +16,10 @@ export type ResultOf<C extends ResultCategory> = C extends 'university'
   ? UniversityResult
   : MathResult;
 
-/** Editable payloads (the middleware assigns ids and derives improvement). */
+/** Editable payloads (the middleware assigns ids). */
 export type ResultInput<C extends ResultCategory> = C extends 'university'
   ? Omit<UniversityResult, 'id'>
-  : Omit<MathResult, 'id' | 'improvement' | 'overallScore'> & {
-      /** null clears the stored value (undefined would vanish in JSON). */
-      overallScore?: number | null;
-    };
+  : Omit<MathResult, 'id'>;
 
 export class AdminApiError extends Error {
   status: number;

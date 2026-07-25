@@ -20,13 +20,18 @@ type Category = (typeof CATEGORIES)[number];
 interface ResultRecord {
   id: string;
   studentName: string;
-  photoUrl: string;
   published: boolean;
   [key: string]: unknown;
 }
 
 /** Optional string fields: '' from the form means "unset" — drop the key. */
-const OPTIONAL_STRINGS = ['testimonial', 'universityName', 'universityLogoUrl', 'acceptanceStatus'];
+const OPTIONAL_STRINGS = [
+  'testimonial',
+  'universityName',
+  'universityLogoUrl',
+  'acceptanceStatus',
+  'certificateUrl',
+];
 
 export function resultsAdminPlugin(): Plugin {
   let root = process.cwd();
@@ -58,23 +63,12 @@ export function resultsAdminPlugin(): Plugin {
     await writeFile(dataFile(category), `${JSON.stringify({ results }, null, 2)}\n`, 'utf8');
   }
 
-  /** Shape a stored math record for the UI (adds derived improvement). */
-  function view(category: Category, record: ResultRecord): ResultRecord {
-    if (category !== 'math') return record;
-    return {
-      ...record,
-      improvement: Number(record.mathAfter) - Number(record.mathBefore),
-    };
-  }
-
-  function cleanRecord(category: Category, id: string, data: Record<string, unknown>): ResultRecord {
+  function cleanRecord(id: string, data: Record<string, unknown>): ResultRecord {
     const record: Record<string, unknown> = { id };
     const copy = { ...data };
     delete copy.id;
-    delete copy.improvement; // always derived, never stored
     for (const [key, value] of Object.entries(copy)) {
       if (OPTIONAL_STRINGS.includes(key) && (value == null || value === '')) continue;
-      if (key === 'overallScore' && category === 'math' && (value == null || value === '')) continue;
       if (value === undefined) continue;
       record[key] = value;
     }
@@ -83,20 +77,16 @@ export function resultsAdminPlugin(): Plugin {
 
   function validate(category: Category, data: Record<string, unknown>): string | null {
     if (!String(data.studentName ?? '').trim()) return 'Student name is required.';
-    if (!String(data.photoUrl ?? '').trim()) return 'A student photo is required.';
     if (category === 'university') {
+      if (!String(data.photoUrl ?? '').trim()) return 'A student photo is required.';
       if (!String(data.country ?? '').trim()) return 'Region is required.';
       const score = Number(data.overallScore);
       if (!Number.isFinite(score) || score < 400 || score > 1600)
         return 'Overall SAT must be between 400 and 1600.';
     } else {
-      const before = Number(data.mathBefore);
-      const after = Number(data.mathAfter);
-      if (!Number.isFinite(before) || before < 200 || before > 800)
-        return 'Math before must be between 200 and 800.';
-      if (!Number.isFinite(after) || after < 200 || after > 800)
-        return 'Math after must be between 200 and 800.';
-      if (after < before) return 'Math after must be greater than or equal to before.';
+      const score = Number(data.mathScore);
+      if (!Number.isFinite(score) || score < 200 || score > 800)
+        return 'Math score must be between 200 and 800.';
     }
     return null;
   }
@@ -159,7 +149,7 @@ export function resultsAdminPlugin(): Plugin {
           const category = categoryOf(url.searchParams);
           if (!category) return sendError(res, 400, 'Unknown or missing category');
           const all = await readAll(category);
-          return send(res, 200, { results: all.map((r) => view(category, r)) });
+          return send(res, 200, { results: all });
         }
 
         if (route === 'POST /upload') {
@@ -199,13 +189,12 @@ export function resultsAdminPlugin(): Plugin {
           return enqueue(async () => {
             const all = await readAll(category);
             const record = cleanRecord(
-              category,
               makeId(category, String(data.studentName), new Set(all.map((r) => r.id))),
               data,
             );
             all.push(record);
             await writeAll(category, all);
-            send(res, 201, { result: view(category, record) });
+            send(res, 201, { result: record });
           });
         }
 
@@ -217,9 +206,9 @@ export function resultsAdminPlugin(): Plugin {
             const all = await readAll(category);
             const idx = all.findIndex((r) => r.id === payload.id);
             if (idx === -1) return sendError(res, 404, 'Result not found');
-            all[idx] = cleanRecord(category, all[idx].id, { ...all[idx], ...data });
+            all[idx] = cleanRecord(all[idx].id, { ...all[idx], ...data });
             await writeAll(category, all);
-            send(res, 200, { result: view(category, all[idx]) });
+            send(res, 200, { result: all[idx] });
           });
         }
 
@@ -230,7 +219,7 @@ export function resultsAdminPlugin(): Plugin {
             if (!record) return sendError(res, 404, 'Result not found');
             record.published = Boolean(payload.published);
             await writeAll(category, all);
-            send(res, 200, { result: view(category, record) });
+            send(res, 200, { result: record });
           });
         }
 

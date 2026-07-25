@@ -218,12 +218,24 @@ function ResultRow({
 }) {
   return (
     <div className="flex flex-wrap items-center gap-4 rounded-2xl border border-ink-200 bg-white p-3 shadow-[var(--shadow-card)] sm:flex-nowrap">
-      <img
-        src={result.photoUrl}
-        alt=""
-        className="size-14 shrink-0 rounded-xl object-cover"
-        onError={(e) => (e.currentTarget.style.visibility = 'hidden')}
-      />
+      {(() => {
+        const thumb =
+          category === 'university'
+            ? (result as UniversityResult).photoUrl
+            : (result as MathResult).certificateUrl;
+        return thumb ? (
+          <img
+            src={thumb}
+            alt=""
+            className="size-14 shrink-0 rounded-xl object-cover"
+            onError={(e) => (e.currentTarget.style.visibility = 'hidden')}
+          />
+        ) : (
+          <div className="grid size-14 shrink-0 place-items-center rounded-xl bg-ink-100 text-xs font-bold text-ink-400">
+            {result.studentName.trim().charAt(0).toUpperCase()}
+          </div>
+        );
+      })()}
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <p className="truncate font-semibold text-navy-900">{result.studentName}</p>
@@ -240,13 +252,14 @@ function ResultRow({
               ]
                 .filter(Boolean)
                 .join(' · ')
-            : `${(result as MathResult).mathBefore} → ${(result as MathResult).mathAfter}`}
+            : 'SAT Math'}
         </p>
       </div>
 
       {category === 'math' && (
         <span className="inline-flex items-center gap-1 rounded-lg bg-brand-50 px-2.5 py-1 text-sm font-bold text-brand-600">
-          <TrendingUpIcon className="size-4" />+{(result as MathResult).improvement}
+          <TrendingUpIcon className="size-4" />
+          {(result as MathResult).mathScore}
         </span>
       )}
 
@@ -286,9 +299,9 @@ interface FormState {
   country: string;
   overallScore: string;
   acceptanceStatus: string;
-  mathBefore: string;
-  mathAfter: string;
-  mathOverall: string;
+  mathScore: string;
+  certificateUrl: string;
+  certificateFile: File | null;
 }
 
 function initialForm(result: UniversityResult | MathResult | null, category: ResultCategory): FormState {
@@ -296,9 +309,9 @@ function initialForm(result: UniversityResult | MathResult | null, category: Res
   const math = category === 'math' ? (result as MathResult | null) : null;
   return {
     studentName: result?.studentName ?? '',
-    photoUrl: result?.photoUrl ?? '',
+    photoUrl: uni?.photoUrl ?? '',
     photoFile: null,
-    testimonial: result?.testimonial ?? '',
+    testimonial: uni?.testimonial ?? '',
     published: result?.published ?? false,
     universityName: uni?.universityName ?? '',
     universityLogoUrl: uni?.universityLogoUrl ?? '',
@@ -306,9 +319,9 @@ function initialForm(result: UniversityResult | MathResult | null, category: Res
     country: uni?.country ?? '',
     overallScore: uni?.overallScore != null ? String(uni.overallScore) : '',
     acceptanceStatus: uni?.acceptanceStatus ?? '',
-    mathBefore: math?.mathBefore != null ? String(math.mathBefore) : '',
-    mathAfter: math?.mathAfter != null ? String(math.mathAfter) : '',
-    mathOverall: math?.overallScore != null ? String(math.overallScore) : '',
+    mathScore: math?.mathScore != null ? String(math.mathScore) : '',
+    certificateUrl: math?.certificateUrl ?? '',
+    certificateFile: null,
   };
 }
 
@@ -331,22 +344,15 @@ function ResultFormModal({
     setForm((f) => ({ ...f, [key]: value }));
   }
 
-  const improvement = useMemo(() => {
-    const before = Number(form.mathBefore);
-    const after = Number(form.mathAfter);
-    if (!form.mathBefore || !form.mathAfter || Number.isNaN(before) || Number.isNaN(after)) return null;
-    return after - before;
-  }, [form.mathBefore, form.mathAfter]);
-
   const save = useMutation<unknown, AdminApiError, void>({
     mutationFn: async () => {
       // Upload any newly-picked images first, then persist the record.
-      let photoUrl = form.photoUrl;
-      if (form.photoFile) photoUrl = (await localAdminApi.uploadImage(form.photoFile)).url;
-      let logoUrl = form.universityLogoUrl;
-      if (form.logoFile) logoUrl = (await localAdminApi.uploadImage(form.logoFile)).url;
-
       if (category === 'university') {
+        let photoUrl = form.photoUrl;
+        if (form.photoFile) photoUrl = (await localAdminApi.uploadImage(form.photoFile)).url;
+        let logoUrl = form.universityLogoUrl;
+        if (form.logoFile) logoUrl = (await localAdminApi.uploadImage(form.logoFile)).url;
+
         // Optional fields are sent as '' (not dropped) so an edit can clear
         // them — the middleware turns '' into "unset" and merge-updates.
         const payload = {
@@ -364,15 +370,14 @@ function ResultFormModal({
           ? localAdminApi.update('university', result!.id, payload)
           : localAdminApi.create('university', payload);
       }
+      let certificateUrl = form.certificateUrl;
+      if (form.certificateFile)
+        certificateUrl = (await localAdminApi.uploadImage(form.certificateFile)).url;
       const payload = {
         studentName: form.studentName.trim(),
-        photoUrl,
-        testimonial: form.testimonial.trim(),
         published: form.published,
-        mathBefore: Number(form.mathBefore),
-        mathAfter: Number(form.mathAfter),
-        // null (not undefined) so clearing the field survives JSON + merge.
-        overallScore: form.mathOverall ? Number(form.mathOverall) : null,
+        mathScore: Number(form.mathScore),
+        certificateUrl,
       };
       return isEdit
         ? localAdminApi.update('math', result!.id, payload)
@@ -384,21 +389,14 @@ function ResultFormModal({
 
   function validate(): string | null {
     if (!form.studentName.trim()) return 'Student name is required.';
-    if (!form.photoUrl && !form.photoFile) return 'A student photo is required.';
     if (category === 'university') {
+      if (!form.photoUrl && !form.photoFile) return 'A student photo is required.';
       if (!form.country.trim()) return 'Region is required.';
       const score = Number(form.overallScore);
       if (!form.overallScore || score < 400 || score > 1600) return 'Overall SAT must be between 400 and 1600.';
     } else {
-      const before = Number(form.mathBefore);
-      const after = Number(form.mathAfter);
-      if (!form.mathBefore || before < 200 || before > 800) return 'Math before must be between 200 and 800.';
-      if (!form.mathAfter || after < 200 || after > 800) return 'Math after must be between 200 and 800.';
-      if (after < before) return 'Math after must be greater than or equal to before.';
-      if (form.mathOverall) {
-        const overall = Number(form.mathOverall);
-        if (overall < 400 || overall > 1600) return 'Overall SAT must be between 400 and 1600.';
-      }
+      const score = Number(form.mathScore);
+      if (!form.mathScore || score < 200 || score > 800) return 'Math score must be between 200 and 800.';
     }
     return null;
   }
@@ -422,17 +420,19 @@ function ResultFormModal({
           <span className="text-ink-500">{category === 'university' ? 'University' : 'SAT Math'}</span>
         </h2>
 
-        <ImageField
-          label="Student photo"
-          url={form.photoUrl}
-          file={form.photoFile}
-          onPick={(file) => set('photoFile', file)}
-          onClear={() => {
-            set('photoFile', null);
-            set('photoUrl', '');
-          }}
-          onError={setError}
-        />
+        {category === 'university' && (
+          <ImageField
+            label="Student photo"
+            url={form.photoUrl}
+            file={form.photoFile}
+            onPick={(file) => set('photoFile', file)}
+            onClear={() => {
+              set('photoFile', null);
+              set('photoUrl', '');
+            }}
+            onError={setError}
+          />
+        )}
 
         <Input
           label="Student name"
@@ -487,51 +487,38 @@ function ResultFormModal({
           </>
         ) : (
           <>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <Input
-                label="Math score before"
-                type="number"
-                min={200}
-                max={800}
-                value={form.mathBefore}
-                onChange={(e) => set('mathBefore', e.target.value)}
-                required
-              />
-              <Input
-                label="Math score after"
-                type="number"
-                min={200}
-                max={800}
-                value={form.mathAfter}
-                onChange={(e) => set('mathAfter', e.target.value)}
-                required
-              />
-            </div>
-            {/* Auto-calculated improvement */}
-            <div className="flex items-center justify-between rounded-xl border border-brand-100 bg-brand-50/60 px-4 py-3">
-              <span className="text-sm font-medium text-ink-600">Improvement (auto-calculated)</span>
-              <span className="inline-flex items-center gap-1 text-lg font-bold text-brand-600">
-                <TrendingUpIcon className="size-5" />
-                {improvement == null ? '—' : `${improvement >= 0 ? '+' : ''}${improvement} pts`}
-              </span>
-            </div>
             <Input
-              label="Overall SAT score (optional)"
+              label="SAT Math score"
+              hint="They sat the test once — a single score, no before/after"
               type="number"
-              min={400}
-              max={1600}
-              value={form.mathOverall}
-              onChange={(e) => set('mathOverall', e.target.value)}
+              min={200}
+              max={800}
+              value={form.mathScore}
+              onChange={(e) => set('mathScore', e.target.value)}
+              required
+            />
+            <ImageField
+              label="Certificate / score report (optional)"
+              url={form.certificateUrl}
+              file={form.certificateFile}
+              onPick={(file) => set('certificateFile', file)}
+              onClear={() => {
+                set('certificateFile', null);
+                set('certificateUrl', '');
+              }}
+              onError={setError}
             />
           </>
         )}
 
-        <Textarea
-          label="Testimonial (optional)"
-          rows={3}
-          value={form.testimonial}
-          onChange={(e) => set('testimonial', e.target.value)}
-        />
+        {category === 'university' && (
+          <Textarea
+            label="Testimonial (optional)"
+            rows={3}
+            value={form.testimonial}
+            onChange={(e) => set('testimonial', e.target.value)}
+          />
+        )}
 
         <div className="rounded-xl border border-ink-200 p-4">
           <Switch

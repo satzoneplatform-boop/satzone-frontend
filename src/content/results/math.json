@@ -3,32 +3,62 @@
     {
       "id": "math-jasur-alimov",
       "studentName": "Jasur Alimov",
-      "photoUrl": "https://images.unsplash.com/photo-1633332755192-727a05c4013d?auto=format&fit=facearea&facepad=2.4&w=640&h=640&q=80",
-      "mathBefore": 560,
-      "mathAfter": 760,
-      "overallScore": 1420,
-      "testimonial": "I went from dreading the Math section to finishing early with time to check my work.",
-      "published": true
+      "mathScore": 760,
+      "published": false
     },
     {
       "id": "math-malika-yusupova",
       "studentName": "Malika Yusupova",
-      "photoUrl": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=facearea&facepad=2.6&w=640&h=640&q=80",
-      "mathBefore": 610,
-      "mathAfter": 780,
-      "overallScore": 1450,
-      "testimonial": "The way they break down each problem type finally made algebra click for me.",
-      "published": true
+      "mathScore": 780,
+      "published": false
     },
     {
       "id": "math-timur-bekov",
       "studentName": "Timur Bekov",
-      "photoUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=facearea&facepad=2.4&w=640&h=640&q=80",
-      "mathBefore": 480,
-      "mathAfter": 700,
-      "overallScore": 1310,
-      "testimonial": "A 220-point jump in Math I honestly did not think was possible in a few months.",
-      "published": true
+      "mathScore": 700,
+      "published": false
+    },
+    {
+      "id": "math-islom-iskandarov",
+      "studentName": "Islom Iskandarov",
+      "published": true,
+      "mathScore": 770,
+      "certificateUrl": "/results/screenshot-19.webp"
+    },
+    {
+      "id": "math-muhammadsodiq-abdumutalov",
+      "studentName": "Muhammadsodiq Abdumutalov",
+      "published": true,
+      "mathScore": 750,
+      "certificateUrl": "/results/photo-2026-06-24-02-38-03.webp"
+    },
+    {
+      "id": "math-abror-tuychiyev",
+      "studentName": "Abror Tuychiyev",
+      "published": true,
+      "mathScore": 790,
+      "certificateUrl": "/results/photo-2026-06-24-02-31-10.webp"
+    },
+    {
+      "id": "math-rustamjon-bahodirov",
+      "studentName": "Rustamjon Bahodirov",
+      "published": true,
+      "mathScore": 790,
+      "certificateUrl": "/results/photo-2026-05-16-01-49-36.webp"
+    },
+    {
+      "id": "math-ruslan-bazarbaev",
+      "studentName": "Ruslan Bazarbaev",
+      "published": true,
+      "mathScore": 790,
+      "certificateUrl": "/results/photo-2026-05-16-01-00-20.webp"
+    },
+    {
+      "id": "math-amirbek-bahtiyarov",
+      "studentName": "Amirbek Bahtiyarov",
+      "published": true,
+      "mathScore": 800,
+      "certificateUrl": "/results/photo-2026-03-27-20-55-41.webp"
     }
   ]
 }

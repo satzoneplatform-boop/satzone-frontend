@@ -198,9 +198,12 @@ built bundle:
 - Data: [`src/content/results/university.json`](./src/content/results/university.json)
   and [`src/content/results/math.json`](./src/content/results/math.json).
   Entries render in file order; set `"published": false` to stage an entry
-  without showing it. `improvement` is derived at build time from
-  `mathBefore`/`mathAfter` — don't add it to the JSON.
-- Photos: drop a webp/jpg into [`public/results/`](./public/results/)
+  without showing it. University entries need a student photo and an
+  `overallScore`; leave `universityName` empty to present one as a top score
+  instead of an acceptance. Math entries are just `studentName` + a single
+  `mathScore` (no before/after, no photo) plus an optional `certificateUrl`
+  image of the score report.
+- Images: drop a webp/jpg into [`public/results/`](./public/results/)
   (kebab-case, e.g. `aziza-karimova.webp`) and reference it as
   `/results/aziza-karimova.webp`. External https URLs also work.
 - Either way, finish with a commit and deploy as usual — updating results is a

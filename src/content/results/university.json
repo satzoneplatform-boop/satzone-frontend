@@ -10,7 +10,7 @@
       "overallScore": 1520,
       "acceptanceStatus": "Accepted",
       "testimonial": "Falcons champion",
-      "published": true
+      "published": false
     },
     {
       "id": "uni-daniyar-toktarov",
@@ -22,7 +22,7 @@
       "overallScore": 1490,
       "acceptanceStatus": "Full Scholarship",
       "testimonial": "Every session had a clear purpose. I walked into test day knowing exactly what to expect.",
-      "published": true
+      "published": false
     },
     {
       "id": "uni-sofia-rahimova",
@@ -34,7 +34,81 @@
       "overallScore": 1530,
       "acceptanceStatus": "Accepted",
       "testimonial": "The mock tests mirrored the real thing so closely that the actual SAT felt routine.",
-      "published": true
+      "published": false
+    },
+    {
+      "id": "university-tojiqulov-ozodbek-shavkat-o-g-li",
+      "studentName": "Tojiqulov Ozodbek",
+      "photoUrl": "/results/screenshot-11-2.webp",
+      "published": true,
+      "universityName": "New Uzbekistan Univeristy",
+      "universityLogoUrl": "/results/logo-new-uzbekistan-university.webp",
+      "country": "TASHKENT",
+      "overallScore": 1210,
+      "acceptanceStatus": "Full Scholarship"
+    },
+    {
+      "id": "university-islombek-iskandarov",
+      "studentName": "Islombek Iskandarov",
+      "photoUrl": "/results/photo-2026-06-26-14-31-48.webp",
+      "published": true,
+      "country": "TASHKENT",
+      "overallScore": 1500
+    },
+    {
+      "id": "university-aliyev-sardorbek",
+      "studentName": "Aliyev Sardorbek",
+      "photoUrl": "/results/photo-2026-05-25-15-58-58.webp",
+      "published": true,
+      "universityName": "New Uzbekistan Univeristy",
+      "universityLogoUrl": "/results/logo-new-uzbekistan-university-2.webp",
+      "country": "TASHKENT",
+      "overallScore": 1300,
+      "acceptanceStatus": "Full Scholarship"
+    },
+    {
+      "id": "university-choriev-vahhobiddin",
+      "studentName": "Choriev Vahhobiddin",
+      "photoUrl": "/results/screenshot-12.webp",
+      "published": true,
+      "universityName": "University of MInnesota",
+      "universityLogoUrl": "/results/screenshot-13.webp",
+      "country": "TASHKENT",
+      "overallScore": 1359,
+      "acceptanceStatus": "Accepted"
+    },
+    {
+      "id": "university-g-apporjonov-abdurashid",
+      "studentName": "G'apporjonov Abdurashid",
+      "photoUrl": "/results/screenshot-14.webp",
+      "published": true,
+      "universityName": "New Uzbekistan University",
+      "universityLogoUrl": "/results/logo-new-uzbekistan-university-3.webp",
+      "country": "TASHKENT",
+      "overallScore": 1190,
+      "acceptanceStatus": "Full scholarship"
+    },
+    {
+      "id": "university-fayzullo-xayrullayev",
+      "studentName": "Fayzullo Xayrullayev",
+      "photoUrl": "/results/screenshot-15.webp",
+      "published": true,
+      "universityName": "New Uzbekistan University",
+      "universityLogoUrl": "/results/logo-new-uzbekistan-university-4.webp",
+      "country": "TASHKENT",
+      "overallScore": 1280,
+      "acceptanceStatus": "Full Scholarship"
+    },
+    {
+      "id": "university-rahimjonov-alisher",
+      "studentName": "Rahimjonov Alisher",
+      "photoUrl": "/results/screenshot-18.webp",
+      "published": true,
+      "universityName": "New Uzbekistan University",
+      "universityLogoUrl": "/results/logo-new-uzbekistan-university-5.webp",
+      "country": "TASHKENT",
+      "overallScore": 1230,
+      "acceptanceStatus": "Full Scholarship"
     }
   ]
 }

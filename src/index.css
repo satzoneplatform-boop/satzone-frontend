@@ -263,6 +263,11 @@
   to   { transform: scaleX(1.12); }
 }
 
+/* Endless drift for the results carousels (track = two identical halves). */
+@keyframes lp-results-scroll {
+  to { transform: translateX(-50%); }
+}
+
 /* Tiny star that blinks in and out. */
 @keyframes lp-twinkle {
   0%,
@@ -435,6 +440,21 @@
     transform-box: fill-box;
     transform-origin: 100% 50%;
     animation: lp-flame-flicker 0.16s ease-in-out infinite alternate;
+  }
+  /* Autonomous results carousel: two identical halves drift to -50% for a
+     seamless loop; hover pauses. Duration set per-row via --dur. */
+  .lp-results-marquee {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+  .lp-results-track {
+    display: flex;
+    width: max-content;
+    animation: lp-results-scroll var(--dur, 40s) linear infinite;
+  }
+  .lp-results-marquee:hover .lp-results-track {
+    animation-play-state: paused;
   }
 
   /* ---- Instructor photo: neon line circling the frame ------------------ */
