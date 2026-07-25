@@ -337,7 +337,7 @@ export const uz: Partial<Record<TranslationKey, string>> = {
 
   // Analytics / progress page
   'analytics.title': 'SAT boʻyicha progressingiz',
-  'analytics.subtitle': 'Ball oʻsishini kuzating, zaif joylarni aniqlang va keyin nimani oʻqishni biling.',
+  'analytics.subtitle': 'Shu haftadagi oʻquv faoliyatingiz va keyin nimaga eʼtibor berishni koʻring.',
   'analytics.projectedScore': 'Prognoz SAT',
   'analytics.targetScore': 'Maqsad',
   'analytics.toGo': 'ball maqsadingizgacha',

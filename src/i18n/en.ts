@@ -1103,7 +1103,7 @@ export const en = {
   'nav.analytics': 'Analytics',
   'page.analytics': 'Analytics',
   'analytics.title': 'Your SAT progress',
-  'analytics.subtitle': 'Track score growth, spot weak areas, and know exactly what to study next.',
+  'analytics.subtitle': 'See your study activity this week and what to focus on next.',
   'analytics.projectedScore': 'Projected SAT',
   'analytics.targetScore': 'Target',
   'analytics.toGo': 'points to your target',

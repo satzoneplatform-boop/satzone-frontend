@@ -337,7 +337,7 @@ export const ru: Partial<Record<TranslationKey, string>> = {
 
   // Analytics / progress page
   'analytics.title': 'Ваш прогресс SAT',
-  'analytics.subtitle': 'Следите за ростом баллов, находите слабые места и знайте, что учить дальше.',
+  'analytics.subtitle': 'Смотрите свою учебную активность за неделю и на чём сосредоточиться дальше.',
   'analytics.projectedScore': 'Прогноз SAT',
   'analytics.targetScore': 'Цель',
   'analytics.toGo': 'баллов до вашей цели',
