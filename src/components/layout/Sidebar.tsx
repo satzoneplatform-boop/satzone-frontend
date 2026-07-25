@@ -3,7 +3,6 @@ import { motion, useReducedMotion } from 'motion/react';
 import { Logo, LogoMark } from '@/components/brand/Logo';
 import {
   BookIcon,
-  ChartIcon,
   FlagIcon,
   GiftIcon,
   GridIcon,
@@ -48,7 +47,6 @@ export function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) {
     { to: '/explore', label: t('nav.explore'), icon: GridIcon },
     { to: '/learning-path', label: t('nav.myLearnings'), icon: BookIcon },
     { to: '/quizzes', label: t('nav.quizzes'), icon: FlagIcon },
-    { to: '/analytics', label: t('nav.analytics'), icon: ChartIcon },
   ];
 
   const adminItems: NavItemConfig[] =

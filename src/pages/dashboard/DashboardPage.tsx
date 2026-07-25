@@ -1,12 +1,10 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { DashboardGreeting } from '@/components/dashboard/DashboardGreeting';
-import { ChartIcon } from '@/components/icons';
 import { LatestCourseCard } from '@/components/dashboard/LatestCourseCard';
 import { LearningPathCard } from '@/components/dashboard/LearningPathCard';
+import { NextActionsRow } from '@/components/dashboard/NextActionsRow';
 import { ProgressOverviewCard } from '@/components/dashboard/ProgressOverviewCard';
 import { RecommendationsRow } from '@/components/dashboard/RecommendationsRow';
-import { SkillRadarCard } from '@/components/dashboard/SkillRadarCard';
 import { WeeklyActivityCard } from '@/components/dashboard/WeeklyActivityCard';
 import { Skeleton, SkeletonCard } from '@/components/ui/Skeleton';
 import { Stagger, StaggerItem } from '@/components/motion/Stagger';
@@ -49,6 +47,7 @@ export function DashboardPage() {
   const continueLearning = home.data?.continue_learning ?? [];
   const recommended = home.data?.recommended ?? [];
   const weeklyGoalMinutes = onboarding.data?.profile?.weekly_goal_minutes ?? 0;
+  const coursesCompleted = continueLearning.filter((e) => e.completed_at).length;
 
   // Real study activity from GET /me/activity/weekly (previously hardcoded
   // to empty). Days with any learned minutes count as study days.
@@ -68,18 +67,6 @@ export function DashboardPage() {
         enrollments={continueLearning}
         weeklyGoalMinutes={weeklyGoalMinutes}
       />
-
-      {/* Analytics is not in the 5-item mobile bottom nav — this row is the
-          mobile entry point (and a handy shortcut on desktop). */}
-      <div className="flex justify-end">
-        <Link
-          to="/analytics"
-          className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-ink-200 bg-white px-3 text-sm font-medium text-brand-600 shadow-[var(--shadow-card)] hover:bg-brand-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
-        >
-          <ChartIcon className="size-4" />
-          {t('dashboard.viewAnalytics')}
-        </Link>
-      </div>
 
       <Stagger
         className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_360px]"
@@ -101,10 +88,7 @@ export function DashboardPage() {
         </StaggerItem>
       </Stagger>
 
-      <Stagger className="grid grid-cols-1 gap-6 lg:grid-cols-3" stagger={0.1}>
-        <StaggerItem className="h-full [&>*]:h-full">
-          <SkillRadarCard />
-        </StaggerItem>
+      <Stagger className="grid grid-cols-1 gap-6 lg:grid-cols-2" stagger={0.1}>
         <StaggerItem className="h-full [&>*]:h-full">
           <LearningPathCard enrollments={continueLearning} />
         </StaggerItem>
@@ -112,6 +96,8 @@ export function DashboardPage() {
           <ProgressOverviewCard enrollments={continueLearning} />
         </StaggerItem>
       </Stagger>
+
+      <NextActionsRow coursesCompleted={coursesCompleted} />
 
       {recommended.length > 0 && (
         <RecommendationsRow title={t('dashboard.recommendedTitle')} courses={recommended} />
@@ -142,10 +128,14 @@ function DashboardSkeleton() {
         <SkeletonCard className="h-56" />
         <SkeletonCard className="h-56" />
       </div>
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <SkeletonCard className="h-64" />
         <SkeletonCard className="h-64" />
-        <SkeletonCard className="h-64" />
+      </div>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <SkeletonCard className="h-36" />
+        <SkeletonCard className="h-36" />
+        <SkeletonCard className="h-36" />
       </div>
     </div>
   );

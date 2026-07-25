@@ -19,7 +19,6 @@ import { ResetPasswordPage } from '@/pages/auth/ResetPasswordPage';
 import { ResetSuccessPage } from '@/pages/auth/ResetSuccessPage';
 import { VerifyPhonePage } from '@/pages/auth/VerifyPhonePage';
 import { AccountPage } from '@/pages/account/AccountPage';
-import { AnalyticsPage } from '@/pages/analytics/AnalyticsPage';
 import { ContactsPage } from '@/pages/contacts/ContactsPage';
 import { AssessmentsAdminPage } from '@/pages/instructor/AssessmentsAdminPage';
 import { PromocodesAdminPage } from '@/pages/admin/PromocodesAdminPage';
@@ -95,7 +94,6 @@ export const router = createBrowserRouter([
           { path: '/instructor/courses/:slug/assessments', element: <AssessmentsAdminPage /> },
           { path: '/admin/promocodes', element: <PromocodesAdminPage /> },
           { path: '/learning-path', element: <MyLearningsPage /> },
-          { path: '/analytics', element: <AnalyticsPage /> },
           { path: '/account', element: <AccountPage /> },
           { path: '/contacts', element: <ContactsPage /> },
           { path: '/quizzes', element: <QuizzesPage /> },

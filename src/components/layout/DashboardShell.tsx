@@ -21,7 +21,6 @@ const TITLE_BY_PATH: Array<{ match: RegExp; titleKey: TranslationKey }> = [
   { match: /^\/courses\/[^/]+/, titleKey: 'page.explore' },
   { match: /^\/courses/, titleKey: 'page.courses' },
   { match: /^\/learning-path/, titleKey: 'page.myLearnings' },
-  { match: /^\/analytics/, titleKey: 'page.analytics' },
   { match: /^\/notifications/, titleKey: 'page.notifications' },
   { match: /^\/inbox/, titleKey: 'page.inbox' },
   { match: /^\/help/, titleKey: 'page.help' },
