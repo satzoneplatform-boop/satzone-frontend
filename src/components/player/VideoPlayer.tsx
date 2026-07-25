@@ -78,6 +78,12 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
     const hlsRef = useRef<Hls | null>(null);
     const lastTickRef = useRef(0);
     const fatalCountRef = useRef(0);
+    // Media-error recovery ladder state (see the ERROR handler). Timestamps of
+    // the last `recoverMediaError()` and `swapAudioCodec()` so we escalate
+    // instead of hammering recovery on every repeated append error.
+    const recoverAtRef = useRef(0);
+    const swapAudioAtRef = useRef(0);
+    const appendErrAtRef = useRef(0);
     // Playback session snapshot carried across player re-attaches. Every
     // token re-mint changes `src` (fresh `?t=`), which tears hls.js down —
     // without this a lesson longer than the ~30 min token TTL restarted at
@@ -103,10 +109,13 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
       reload: () => onRequestRefreshRef.current(),
     }));
 
-    // Reset fatal counter whenever a new src is in play — a successful
-    // re-mint means we're starting over.
+    // Reset fatal counter + recovery ladder whenever a new src is in play — a
+    // successful re-mint means we're starting over.
     useEffect(() => {
       fatalCountRef.current = 0;
+      recoverAtRef.current = 0;
+      swapAudioAtRef.current = 0;
+      appendErrAtRef.current = 0;
     }, [src]);
 
     useEffect(() => {
@@ -270,6 +279,54 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
         }
 
         if (!data.fatal) {
+          // Chrome's MSE SourceBuffer rejecting appends that VLC tolerates.
+          // hls.js reports these as NON-fatal and retries the same append in a
+          // tight loop forever, so playback freezes right after the first
+          // fragment — the observed `bufferAppendError` / `bufferAppendingError`
+          // storm. Walk hls.js's documented media-error recovery ladder, but
+          // throttled (the events fire many times a second): first re-create
+          // the buffers, then — if it recurs — swap the audio codec and recover
+          // (the usual cause is a mislabeled AAC profile on stream-copied
+          // segments that MSE won't accept), then give up with a real message
+          // instead of looping. Only append errors reach here, so working
+          // videos are untouched.
+          if (
+            data.details === Hls.ErrorDetails.BUFFER_APPEND_ERROR ||
+            data.details === Hls.ErrorDetails.BUFFER_APPENDING_ERROR
+          ) {
+            const now = Date.now();
+            // Cool-down: give each recovery step a few seconds to prove itself
+            // before escalating, and ignore the rest of the burst.
+            if (now - appendErrAtRef.current < 4000) return;
+            if (recoverAtRef.current === 0) {
+              recoverAtRef.current = now;
+              appendErrAtRef.current = now;
+              try {
+                hls.recoverMediaError();
+              } catch {
+                /* player may be torn down — ignore */
+              }
+            } else if (swapAudioAtRef.current === 0) {
+              swapAudioAtRef.current = now;
+              appendErrAtRef.current = now;
+              try {
+                hls.swapAudioCodec();
+                hls.recoverMediaError();
+              } catch {
+                /* player may be torn down — ignore */
+              }
+            } else {
+              setError(
+                'This video could not be played in your browser. Try refreshing, or open it in a different browser.',
+              );
+              try {
+                hls.stopLoad();
+              } catch {
+                /* ignore */
+              }
+            }
+            return;
+          }
           // Non-fatal buffer stall: get the playhead back onto buffered data.
           if (
             data.details === Hls.ErrorDetails.BUFFER_STALLED_ERROR &&
