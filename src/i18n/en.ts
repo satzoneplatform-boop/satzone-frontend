@@ -688,6 +688,8 @@ export const en = {
   'checkout.freeCta': 'Enroll for free',
   'checkout.payCta': 'Continue to Payme',
   'checkout.payError': 'We couldn’t start your payment. Please try again.',
+  'checkout.err.unavailable': 'Payments are temporarily unavailable. Please try again later.',
+  'checkout.err.providerFailed': 'The payment provider couldn’t process this. Please try again.',
   'checkout.success.title': 'Payment successful!',
   'checkout.success.body': 'You now have full access to this course and all its learning materials.',
   'checkout.success.confirmingTitle': 'Confirming your payment…',
@@ -697,6 +699,11 @@ export const en = {
   'checkout.success.tryAgain': 'Try again',
   'checkout.success.totalPaid': 'Total paid',
   'checkout.success.getStarted': 'Get started',
+  'checkout.success.stillProcessingTitle': 'Still confirming your payment',
+  'checkout.success.stillProcessingBody':
+    'This is taking longer than usual. Your payment may still go through — check your courses in a moment, or check again now.',
+  'checkout.success.checkAgain': 'Check again',
+  'checkout.success.goToLearning': 'Go to My Learning',
 
   // Assessment → overview
   'assessment.overview.unavailable': 'This assessment is unavailable.',

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Avatar } from '@/components/ui/Avatar';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { Spinner } from '@/components/ui/Spinner';
 import { CommitmentModal } from '@/pages/course/CommitmentModal';
 import { CourseThumbnail } from '@/components/course/CourseThumbnail';
+import { ClockIcon } from '@/components/icons';
 import { ordersApi } from '@/api/orders';
 import { useCourseDetail } from '@/features/course/hooks';
 import { formatPrice } from '@/lib/format';
@@ -16,18 +17,24 @@ import type { EnrollmentRead, OrderStatus } from '@/types/api';
 
 const COMMITMENT_KEY = (courseId: string) => `satzone.commitment.${courseId}`;
 const TERMINAL: OrderStatus[] = ['paid', 'cancelled', 'refunded', 'failed'];
+/** Give up active polling after this long and show a "still processing" screen
+ * (§4.13) — the Payme callback usually settles in seconds, but a delayed one
+ * shouldn't leave the user staring at an infinite spinner. */
+const POLL_TIMEOUT_MS = 30_000;
 
 export function CheckoutSuccessPage() {
   const t = useT();
   const { slug } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get('order');
   const freeEnrollment =
     (location.state as { enrollment?: EnrollmentRead } | null)?.enrollment ?? null;
   const course = useCourseDetail(slug);
   const [commitmentOpen, setCommitmentOpen] = useState(false);
+  const [gaveUp, setGaveUp] = useState(false);
 
   // Paid flow: poll the order until it reaches a terminal state. Payment is
   // confirmed server-side by the Payme merchant callback, so we never mark
@@ -35,7 +42,7 @@ export function CheckoutSuccessPage() {
   const orderQuery = useQuery({
     queryKey: ['order', orderId],
     queryFn: () => ordersApi.detail(orderId!),
-    enabled: Boolean(orderId),
+    enabled: Boolean(orderId) && !gaveUp,
     refetchInterval: (query) => {
       const status = query.state.data?.status;
       return status && TERMINAL.includes(status) ? false : 2000;
@@ -46,8 +53,31 @@ export function CheckoutSuccessPage() {
   const isPaidFlow = Boolean(orderId);
   const status: OrderStatus | 'free' = isPaidFlow ? order?.status ?? 'pending' : 'free';
   const settled = status === 'paid' || status === 'free';
-  const pending = isPaidFlow && (status === 'pending' || status === 'processing');
   const failed = status === 'cancelled' || status === 'refunded' || status === 'failed';
+  const timedOut = isPaidFlow && gaveUp && !settled && !failed;
+  const pending = isPaidFlow && !settled && !failed && !timedOut;
+
+  // Stop polling after the deadline if the order hasn't settled. Restarts when
+  // the user hits "Check again" (gaveUp → false re-enables the query + timer).
+  useEffect(() => {
+    if (!isPaidFlow || gaveUp || settled || failed) return;
+    const id = window.setTimeout(() => setGaveUp(true), POLL_TIMEOUT_MS);
+    return () => window.clearTimeout(id);
+  }, [isPaidFlow, gaveUp, settled, failed]);
+
+  // Once the order is paid, the entitlement (enrollment) exists — refresh the
+  // surfaces that gate on it so "My Learning"/the course page reflect it.
+  useEffect(() => {
+    if (order?.status !== 'paid') return;
+    void queryClient.invalidateQueries({ queryKey: ['home'] });
+    void queryClient.invalidateQueries({ queryKey: ['enrollments'] });
+    if (slug) void queryClient.invalidateQueries({ queryKey: ['course', slug] });
+  }, [order?.status, slug, queryClient]);
+
+  function onCheckAgain() {
+    setGaveUp(false);
+    void orderQuery.refetch();
+  }
 
   // Celebrate once when the enrollment is confirmed and the card is visible.
   const celebrated = useRef(false);
@@ -122,6 +152,26 @@ export function CheckoutSuccessPage() {
               <p className="mt-2 text-sm text-ink-500">
                 {t('checkout.success.confirmingBody')}
               </p>
+            </div>
+          ) : timedOut ? (
+            <div className="px-8 py-14 text-center">
+              <div className="mx-auto grid size-16 place-items-center rounded-full bg-warn-50 text-warn-600">
+                <ClockIcon className="size-8" />
+              </div>
+              <h1 className="mt-5 text-xl font-semibold tracking-tight text-navy-900">
+                {t('checkout.success.stillProcessingTitle')}
+              </h1>
+              <p className="mt-2 text-sm text-ink-500">
+                {t('checkout.success.stillProcessingBody')}
+              </p>
+              <div className="mt-6 flex flex-col items-center gap-2">
+                <Button onClick={onCheckAgain} loading={orderQuery.isFetching}>
+                  {t('checkout.success.checkAgain')}
+                </Button>
+                <Button variant="ghost" onClick={() => navigate('/learning-path')}>
+                  {t('checkout.success.goToLearning')}
+                </Button>
+              </div>
             </div>
           ) : failed ? (
             <div className="px-8 py-14 text-center">

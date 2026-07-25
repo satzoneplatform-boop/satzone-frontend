@@ -1169,6 +1169,8 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'checkout.freeCta': 'Bepul ro‘yxatdan o‘tish',
   'checkout.payCta': 'Payme’ga o‘tish',
   'checkout.payError': 'To‘lovni boshlab bo‘lmadi. Qayta urinib ko‘ring.',
+  'checkout.err.unavailable': 'To‘lov vaqtincha mavjud emas. Keyinroq urinib ko‘ring.',
+  'checkout.err.providerFailed': 'To‘lov provayderi buni amalga oshira olmadi. Qayta urinib ko‘ring.',
   'checkout.success.title': 'To‘lov muvaffaqiyatli!',
   'checkout.success.body': 'Endi siz ushbu kurs va uning barcha materiallariga to‘liq kirish huquqiga egasiz.',
   'checkout.success.confirmingTitle': 'To‘lov tasdiqlanmoqda…',
@@ -1178,6 +1180,11 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'checkout.success.tryAgain': 'Qayta urinish',
   'checkout.success.totalPaid': 'Jami to‘langan',
   'checkout.success.getStarted': 'Boshlash',
+  'checkout.success.stillProcessingTitle': 'To‘lov tasdiqlanmoqda',
+  'checkout.success.stillProcessingBody':
+    'Bu odatdagidan ko‘proq vaqt olmoqda. To‘lov hali ham amalga oshishi mumkin — birozdan so‘ng kurslaringizni tekshiring yoki hozir qayta tekshiring.',
+  'checkout.success.checkAgain': 'Qayta tekshirish',
+  'checkout.success.goToLearning': 'Mening kurslarim',
 
   // Nav
   'nav.admin': 'Administratsiya',

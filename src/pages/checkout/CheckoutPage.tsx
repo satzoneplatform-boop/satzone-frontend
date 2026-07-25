@@ -11,10 +11,14 @@ import { ApiError } from '@/api/errors';
 import { enrollmentsApi } from '@/api/enrollments';
 import { ordersApi } from '@/api/orders';
 import { useCourseDetail } from '@/features/course/hooks';
-import type { EnrollmentRead } from '@/types/api';
+import type { EnrollmentRead, OrderRead, PayResponse } from '@/types/api';
 import { useT } from '@/i18n/I18nProvider';
 
-/** Backend promo/order error codes → friendly i18n keys for the pay banner. */
+/**
+ * Backend promo/order error codes → friendly i18n keys for the pay banner.
+ * A promo code that lapsed between preview and order creation lands here — we
+ * drop the applied code and let the user retry at full price.
+ */
 const PAY_ERROR_KEY: Record<string, string> = {
   promocode_not_found: 'checkout.promo.err.notFound',
   promocode_wrong_course: 'checkout.promo.err.wrongCourse',
@@ -29,6 +33,17 @@ const PAY_ERROR_KEY: Record<string, string> = {
   promocode_makes_free: 'checkout.promo.err.makesFree',
 };
 
+/**
+ * Payme / provider failures (§4.13). `payment_provider_unconfigured` is an
+ * infra problem (no credentials); `payment_provider_error` is Payme refusing
+ * or being unreachable and is retryable. Both keep the user on the page.
+ */
+const PROVIDER_ERROR_KEY: Record<string, string> = {
+  payment_provider_unconfigured: 'checkout.err.unavailable',
+  payment_provider_error: 'checkout.err.providerFailed',
+  payment_no_url: 'checkout.err.providerFailed',
+};
+
 export function CheckoutPage() {
   const t = useT();
   const { slug } = useParams();
@@ -38,36 +53,66 @@ export function CheckoutPage() {
   const [promo, setPromo] = useState<PromocodePreview | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  /** Grant is confirmed: refresh the surfaces that show entitlement, then
+   * route into the success screen. Used by both the free path and the
+   * free-item fallback below. */
+  function onFreeEnrolled(enrollment: EnrollmentRead) {
+    void queryClient.invalidateQueries({ queryKey: ['home'] });
+    void queryClient.invalidateQueries({ queryKey: ['enrollments'] });
+    if (slug) void queryClient.invalidateQueries({ queryKey: ['course', slug] });
+    navigate(`/courses/${slug}/checkout/success`, {
+      state: { enrollment },
+      replace: true,
+    });
+  }
+
   // Free courses use the legitimate free-enrollment path; paid courses go
   // through the real order → Payme hosted-checkout flow.
   const freeEnroll = useMutation<EnrollmentRead, ApiError, void>({
     mutationFn: () => enrollmentsApi.enroll(course.data!.id),
-    onSuccess: (data) => {
-      void queryClient.invalidateQueries({ queryKey: ['home'] });
-      navigate(`/courses/${slug}/checkout/success`, {
-        state: { enrollment: data },
-        replace: true,
-      });
-    },
+    onSuccess: onFreeEnrolled,
     onError: (err) => handleMutationError(err),
   });
 
   const payWithPayme = useMutation<void, ApiError, void>({
     mutationFn: async () => {
-      // Create (or reuse) the pending order at the server-computed price,
-      // passing the applied promo code so the server re-validates + reprices.
-      const order = await ordersApi.create({
-        item_kind: 'course',
-        course_id: course.data!.id,
-        promocode: promo?.code ?? null,
-      });
+      // Create a pending order at the server-computed price, passing the
+      // applied promo code so the server re-validates + reprices. Amount is
+      // server-authoritative — we never send a price from the client.
+      let order: OrderRead;
+      try {
+        order = await ordersApi.create({
+          item_kind: 'course',
+          course_id: course.data!.id,
+          promocode: promo?.code ?? null,
+        });
+      } catch (err) {
+        // The item is free server-side (price changed, or our `is_free` was
+        // stale): the orders API refuses free items, so enroll directly.
+        if (err instanceof ApiError && err.code === 'free_item') {
+          onFreeEnrolled(await enrollmentsApi.enroll(course.data!.id));
+          return;
+        }
+        throw err;
+      }
+
       const returnUrl = `${window.location.origin}/courses/${slug}/checkout/success?order=${order.id}`;
-      const res = await ordersApi.payPayme(order.id, returnUrl);
+      let res: PayResponse;
+      try {
+        res = await ordersApi.payPayme(order.id, returnUrl);
+      } catch (err) {
+        // Don't leak a stale `pending` order (and its reserved promo code) if
+        // the hand-off fails — release it best-effort, then surface the error.
+        void ordersApi.cancel(order.id).catch(() => {});
+        throw err;
+      }
       if (!res.checkout_url) {
+        void ordersApi.cancel(order.id).catch(() => {});
         throw new ApiError(502, 'payment_no_url', 'No checkout URL', null);
       }
-      // Hand off to Payme's hosted page. On success Payme confirms the order
-      // via the merchant callback and redirects back to returnUrl.
+      // Hand off to Payme's hosted page (full-page nav, not XHR). Payme
+      // confirms the order via the merchant callback and redirects back to
+      // returnUrl, where CheckoutSuccessPage polls for the authoritative status.
       window.location.assign(res.checkout_url);
     },
     onError: (err) => handleMutationError(err),
@@ -83,6 +128,10 @@ export function CheckoutPage() {
     if (err.code in PAY_ERROR_KEY) {
       setPromo(null);
       setError(t(PAY_ERROR_KEY[err.code] as never));
+      return;
+    }
+    if (err.code in PROVIDER_ERROR_KEY) {
+      setError(t(PROVIDER_ERROR_KEY[err.code] as never));
       return;
     }
     setError(err.message || t('checkout.payError'));

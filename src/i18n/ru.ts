@@ -1169,6 +1169,8 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'checkout.freeCta': 'Записаться бесплатно',
   'checkout.payCta': 'Перейти к Payme',
   'checkout.payError': 'Не удалось начать оплату. Попробуйте снова.',
+  'checkout.err.unavailable': 'Оплата временно недоступна. Попробуйте позже.',
+  'checkout.err.providerFailed': 'Платёжный провайдер не смог обработать платёж. Попробуйте снова.',
   'checkout.success.title': 'Оплата прошла успешно!',
   'checkout.success.body': 'Теперь у вас есть полный доступ к этому курсу и всем его материалам.',
   'checkout.success.confirmingTitle': 'Подтверждаем оплату…',
@@ -1178,6 +1180,11 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'checkout.success.tryAgain': 'Попробовать снова',
   'checkout.success.totalPaid': 'Итого оплачено',
   'checkout.success.getStarted': 'Начать',
+  'checkout.success.stillProcessingTitle': 'Подтверждаем оплату',
+  'checkout.success.stillProcessingBody':
+    'Это занимает больше времени, чем обычно. Оплата ещё может пройти — проверьте свои курсы чуть позже или обновите статус сейчас.',
+  'checkout.success.checkAgain': 'Проверить снова',
+  'checkout.success.goToLearning': 'Мои курсы',
 
   // Nav
   'nav.admin': 'Администрирование',
