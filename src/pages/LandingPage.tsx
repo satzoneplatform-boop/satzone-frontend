@@ -790,22 +790,26 @@ function RocketClimb({ className }: { className?: string }) {
 
 function MetricsBand() {
   const t = useT();
-  // Live admin-curated figures from GET /landing/stats. The backend returns
-  // zeros until an admin sets them, so each field falls back to the
-  // marketing defaults — the band must never read "0+ students".
+  // Live figures from GET /landing/stats — every value is backend-driven.
+  // While the request is in flight (data undefined) each tile shows a
+  // placeholder instead of a hardcoded number, so nothing static is shown.
   const stats = useQuery({
     queryKey: ['landing', 'stats'],
     queryFn: () => landingApi.stats(),
     staleTime: 5 * 60_000,
   });
-  const live = (value: number | undefined, fallback: number) =>
-    value && value > 0 ? value : fallback;
   const s = stats.data;
-  const metrics = [
-    { to: live(s?.students_count, 25000), suffix: '+', sep: true, label: t('landing.metrics.students') },
-    { to: live(s?.average_score_gain, 180), prefix: '+', label: t('landing.metrics.avgGain') },
-    { to: live(s?.practice_questions, 12000), suffix: '+', sep: true, label: t('landing.metrics.questions') },
-    { to: live(s?.top_student_sat_score, 1570), label: t('landing.metrics.topScore') },
+  const metrics: Array<{
+    value: number | undefined;
+    prefix?: string;
+    suffix?: string;
+    sep?: boolean;
+    label: string;
+  }> = [
+    { value: s?.students_count, suffix: '+', sep: true, label: t('landing.metrics.students') },
+    { value: s?.average_score_gain, prefix: '+', label: t('landing.metrics.avgGain') },
+    { value: s?.practice_questions, suffix: '+', sep: true, label: t('landing.metrics.questions') },
+    { value: s?.top_student_sat_score, label: t('landing.metrics.topScore') },
   ];
   return (
     // Floating glass proof-band, pulled up over the hero's bottom edge on
@@ -818,12 +822,19 @@ function MetricsBand() {
         {metrics.map((m) => (
           <StaggerItem key={m.label} className="text-center lg:px-6">
             <p className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
-              <CountUp
-                to={m.to}
-                prefix={m.prefix ?? ''}
-                suffix={m.suffix ?? ''}
-                separator={m.sep}
-              />
+              {m.value === undefined ? (
+                <span
+                  aria-hidden
+                  className="mx-auto block h-9 w-24 animate-pulse rounded-lg bg-white/10 sm:h-10 lg:h-12"
+                />
+              ) : (
+                <CountUp
+                  to={m.value}
+                  prefix={m.prefix ?? ''}
+                  suffix={m.suffix ?? ''}
+                  separator={m.sep}
+                />
+              )}
             </p>
             <p className="mt-1 text-sm text-white/55">{m.label}</p>
           </StaggerItem>
