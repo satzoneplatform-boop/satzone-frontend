@@ -4,7 +4,6 @@ import {
   useRef,
   useState,
   type FormEvent,
-  type ReactNode,
 } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/Button';
@@ -14,111 +13,29 @@ import { Textarea } from '@/components/ui/Textarea';
 import { Switch } from '@/components/ui/Switch';
 import { Modal } from '@/components/ui/Modal';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { Spinner } from '@/components/ui/Spinner';
 import { Tabs } from '@/components/ui/Tabs';
 import { Logo } from '@/components/brand/Logo';
-import { LockIcon, LogoutIcon, TrendingUpIcon } from '@/components/icons';
-import { adminResultsApi } from '@/api/adminResults';
-import { CmsError } from '@/api/cmsClient';
-import type {
-  MathResult,
-  ResultCategory,
-  UniversityResult,
-} from '@/features/results/types';
+import { TrendingUpIcon } from '@/components/icons';
+import {
+  AdminApiError,
+  localAdminApi,
+  type ResultCategory,
+} from '@/api/resultsAdminLocal';
+import type { MathResult, UniversityResult } from '@/features/results/types';
 
 /**
- * Private Results CMS admin panel (route: /admin/results).
+ * Local results editor (route: /admin/results, dev server only).
  *
- * Deliberately standalone — not in the site navigation and not behind the app's
- * user auth. It has its own shared-password gate (see AdminAuthGate) and manages
- * both result categories: create/edit/delete, publish/unpublish, and student
- * photo uploads with a live preview. Strings are inline English on purpose; this
- * is an internal ops tool, not part of the localized public site.
+ * A UI over the repo's results content: it talks to the dev-only Vite
+ * middleware (dev/resultsAdminPlugin.ts), which edits
+ * `src/content/results/*.json` and saves photos into `public/results/`.
+ * The route is not registered in production builds, so there is no auth —
+ * publishing an edit means committing the changed files. Strings are inline
+ * English on purpose; this is an internal ops tool, not part of the
+ * localized public site.
  */
 export function ResultsAdminPage() {
-  return (
-    <AdminAuthGate>
-      <ResultsManager />
-    </AdminAuthGate>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* Auth gate                                                                  */
-/* -------------------------------------------------------------------------- */
-
-function AdminAuthGate({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<'checking' | 'out' | 'in'>('checking');
-
-  useEffect(() => {
-    let active = true;
-    // validateSession() resolves false immediately when no token is stored, so
-    // this single async path covers both "no token" and "expired token".
-    adminResultsApi.validateSession().then((ok) => {
-      if (active) setState(ok ? 'in' : 'out');
-    });
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  if (state === 'checking') {
-    return (
-      <div className="grid min-h-screen place-items-center bg-ink-50">
-        <Spinner size="lg" />
-      </div>
-    );
-  }
-  if (state === 'out') {
-    return <AdminLogin onSuccess={() => setState('in')} />;
-  }
-  return <>{children}</>;
-}
-
-function AdminLogin({ onSuccess }: { onSuccess: () => void }) {
-  const [password, setPassword] = useState('');
-  const login = useMutation<void, CmsError, string>({
-    mutationFn: (pw) => adminResultsApi.login(pw),
-    onSuccess,
-  });
-
-  function onSubmit(e: FormEvent) {
-    e.preventDefault();
-    if (password) login.mutate(password);
-  }
-
-  return (
-    <div className="grid min-h-screen place-items-center bg-navy-900 px-4">
-      <form
-        onSubmit={onSubmit}
-        className="relative w-full max-w-sm rounded-3xl border border-white/10 bg-white p-8 shadow-[0_30px_80px_-20px_rgb(0_0_0/0.6)]"
-      >
-        <div className="flex flex-col items-center text-center">
-          <Logo size={40} />
-          <span className="mt-4 grid size-11 place-items-center rounded-xl bg-brand-50 text-brand-600">
-            <LockIcon className="size-5" />
-          </span>
-          <h1 className="mt-4 text-lg font-bold text-navy-900">Results admin</h1>
-          <p className="mt-1 text-sm text-ink-500">Enter the admin password to manage student results.</p>
-        </div>
-
-        <div className="mt-6">
-          <Input
-            type="password"
-            label="Password"
-            value={password}
-            autoFocus
-            onChange={(e) => setPassword(e.target.value)}
-            error={login.isError ? 'Incorrect password. Try again.' : undefined}
-          />
-        </div>
-
-        <Button type="submit" fullWidth className="mt-5" loading={login.isPending} disabled={!password}>
-          Sign in
-        </Button>
-      </form>
-    </div>
-  );
+  return <ResultsManager />;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -139,22 +56,22 @@ function ResultsManager() {
 
   const list = useQuery({
     queryKey: ['admin-results', category],
-    queryFn: () => adminResultsApi.list(category),
+    queryFn: () => localAdminApi.list(category),
   });
 
+  // The public landing section imports the JSON statically, so no query
+  // invalidation is needed for it — Vite hot-reloads it when the file changes.
   const invalidate = () => {
     qc.invalidateQueries({ queryKey: ['admin-results', category] });
-    // Public landing query for this category is now stale too.
-    qc.invalidateQueries({ queryKey: ['results', category] });
   };
 
-  const publish = useMutation<unknown, CmsError, { id: string; published: boolean }>({
-    mutationFn: ({ id, published }) => adminResultsApi.setPublished(category, id, published),
+  const publish = useMutation<unknown, AdminApiError, { id: string; published: boolean }>({
+    mutationFn: ({ id, published }) => localAdminApi.setPublished(category, id, published),
     onSuccess: invalidate,
   });
 
-  const remove = useMutation<void, CmsError, string>({
-    mutationFn: (id) => adminResultsApi.remove(category, id),
+  const remove = useMutation<void, AdminApiError, string>({
+    mutationFn: (id) => localAdminApi.remove(category, id),
     onSuccess: () => {
       setDeleting(null);
       invalidate();
@@ -169,20 +86,12 @@ function ResultsManager() {
         <div className="mx-auto flex max-w-5xl items-center gap-4 px-4 py-4 sm:px-6">
           <Logo withWordmark size={26} />
           <span className="rounded-md bg-ink-100 px-2 py-0.5 text-xs font-semibold text-ink-600">
-            Results CMS
+            Local editor
           </span>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="ml-auto"
-            leftIcon={<LogoutIcon />}
-            onClick={() => {
-              adminResultsApi.logout();
-              window.location.reload();
-            }}
-          >
-            Sign out
-          </Button>
+          <span className="ml-auto text-xs text-ink-400">
+            Edits write to <code className="font-mono">src/content/results</code> — commit &amp;
+            deploy to publish
+          </span>
         </div>
       </header>
 
@@ -278,7 +187,9 @@ function ResultsManager() {
 function ErrorBlock({ onRetry }: { onRetry: () => void }) {
   return (
     <div className="rounded-2xl border border-danger-500/30 bg-danger-50 py-14 text-center">
-      <p className="text-sm text-danger-600">Couldn't load results. Is the CMS server running?</p>
+      <p className="text-sm text-danger-600">
+        Couldn't load results. This editor only works on the local dev server (npm run dev).
+      </p>
       <Button variant="outline" size="sm" className="mt-3" onClick={onRetry}>
         Retry
       </Button>
@@ -427,17 +338,17 @@ function ResultFormModal({
     return after - before;
   }, [form.mathBefore, form.mathAfter]);
 
-  const save = useMutation<unknown, CmsError, void>({
+  const save = useMutation<unknown, AdminApiError, void>({
     mutationFn: async () => {
       // Upload any newly-picked images first, then persist the record.
       let photoUrl = form.photoUrl;
-      if (form.photoFile) photoUrl = (await adminResultsApi.uploadImage(form.photoFile)).url;
+      if (form.photoFile) photoUrl = (await localAdminApi.uploadImage(form.photoFile)).url;
       let logoUrl = form.universityLogoUrl;
-      if (form.logoFile) logoUrl = (await adminResultsApi.uploadImage(form.logoFile)).url;
+      if (form.logoFile) logoUrl = (await localAdminApi.uploadImage(form.logoFile)).url;
 
       if (category === 'university') {
         // Optional fields are sent as '' (not dropped) so an edit can clear
-        // them — the server turns '' into "unset" and merge-updates.
+        // them — the middleware turns '' into "unset" and merge-updates.
         const payload = {
           studentName: form.studentName.trim(),
           photoUrl,
@@ -450,8 +361,8 @@ function ResultFormModal({
           acceptanceStatus: form.acceptanceStatus.trim(),
         };
         return isEdit
-          ? adminResultsApi.update('university', result!.id, payload)
-          : adminResultsApi.create('university', payload);
+          ? localAdminApi.update('university', result!.id, payload)
+          : localAdminApi.create('university', payload);
       }
       const payload = {
         studentName: form.studentName.trim(),
@@ -460,21 +371,22 @@ function ResultFormModal({
         published: form.published,
         mathBefore: Number(form.mathBefore),
         mathAfter: Number(form.mathAfter),
-        overallScore: form.mathOverall ? Number(form.mathOverall) : undefined,
+        // null (not undefined) so clearing the field survives JSON + merge.
+        overallScore: form.mathOverall ? Number(form.mathOverall) : null,
       };
       return isEdit
-        ? adminResultsApi.update('math', result!.id, payload)
-        : adminResultsApi.create('math', payload);
+        ? localAdminApi.update('math', result!.id, payload)
+        : localAdminApi.create('math', payload);
     },
     onSuccess: onSaved,
-    onError: (err) => setError(formatCmsError(err)),
+    onError: (err) => setError(err.message || 'Something went wrong. Please try again.'),
   });
 
   function validate(): string | null {
     if (!form.studentName.trim()) return 'Student name is required.';
     if (!form.photoUrl && !form.photoFile) return 'A student photo is required.';
     if (category === 'university') {
-      if (!form.country.trim()) return 'Country is required.';
+      if (!form.country.trim()) return 'Region is required.';
       const score = Number(form.overallScore);
       if (!form.overallScore || score < 400 || score > 1600) return 'Overall SAT must be between 400 and 1600.';
     } else {
@@ -539,7 +451,7 @@ function ResultFormModal({
             />
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <Input
-                label="Country"
+                label="Region"
                 value={form.country}
                 onChange={(e) => set('country', e.target.value)}
                 required
@@ -728,13 +640,4 @@ function ImageField({
       </div>
     </div>
   );
-}
-
-function formatCmsError(err: CmsError): string {
-  if (err.details) {
-    const first = Object.values(err.details).flat().filter(Boolean)[0];
-    if (first) return String(first);
-  }
-  if (err.status === 401) return 'Your session expired. Please sign in again.';
-  return err.message || 'Something went wrong. Please try again.';
 }

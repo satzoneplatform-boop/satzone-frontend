@@ -183,6 +183,29 @@ then PATCHes `/admin/courses/{id}` to reassign `instructor_id` to the admin.
 | `npm run preview` | Serve the production build locally |
 | `npx tsc --noEmit` | Type-check without emitting |
 
+## Student results content
+
+The landing page's "Results" section (university acceptances + SAT Math
+improvements) is plain repo content — no server, no CMS, it ships inside the
+built bundle:
+
+- **Editor UI (recommended):** run `npm run dev` and open
+  <http://localhost:5173/admin/results>. It's the full panel — add/edit/delete,
+  publish toggle, photo upload with automatic webp optimization — and it writes
+  the files below directly. Dev-server only: the route and its API middleware
+  ([`dev/resultsAdminPlugin.ts`](./dev/resultsAdminPlugin.ts)) don't exist in
+  production builds, so there's no password and nothing to host.
+- Data: [`src/content/results/university.json`](./src/content/results/university.json)
+  and [`src/content/results/math.json`](./src/content/results/math.json).
+  Entries render in file order; set `"published": false` to stage an entry
+  without showing it. `improvement` is derived at build time from
+  `mathBefore`/`mathAfter` — don't add it to the JSON.
+- Photos: drop a webp/jpg into [`public/results/`](./public/results/)
+  (kebab-case, e.g. `aziza-karimova.webp`) and reference it as
+  `/results/aziza-karimova.webp`. External https URLs also work.
+- Either way, finish with a commit and deploy as usual — updating results is a
+  normal git change, and the diff is the review.
+
 ## Deploy
 
 This is checked in as a standalone git repo (origin `satzoneplatform-boop/satzone-frontend`).

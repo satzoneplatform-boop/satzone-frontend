@@ -10,10 +10,4 @@ export const env = {
   telegramBotUrl:
     import.meta.env.VITE_TELEGRAM_BOT_URL ??
     'https://t.me/satzone_verification_bot',
-  /**
-   * Base URL for the Results CMS API (server/index.js). Relative by default so
-   * Vite proxies it in dev and it stays same-origin in prod; override with an
-   * absolute URL if the CMS is hosted separately.
-   */
-  cmsBaseUrl: import.meta.env.VITE_CMS_BASE_URL ?? '/cms/api',
 } as const;

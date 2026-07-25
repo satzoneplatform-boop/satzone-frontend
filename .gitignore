@@ -29,11 +29,6 @@ coverage
 # OS files
 Thumbs.db
 
-# Runtime-uploaded student photos (host-local; the data/*.json files are
-# tracked with their seed content, but images live on the EC2 disk).
-public/uploads/students/*
-!public/uploads/students/.gitkeep
-
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

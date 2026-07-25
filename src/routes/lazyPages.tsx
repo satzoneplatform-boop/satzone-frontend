@@ -22,15 +22,19 @@ export function LazyLessonPlayerPage() {
   );
 }
 
-// Lazy-load the private Results CMS admin panel so its bundle never ships to
-// public visitors — only fetched when someone actually opens /admin/results.
-const ResultsAdminPage = lazy(() =>
-  import('@/pages/admin/ResultsAdminPage').then((m) => ({
-    default: m.ResultsAdminPage,
-  })),
-);
+// Dev-only local results editor. The whole declaration is guarded by
+// import.meta.env.DEV so production builds drop the page and its chunk —
+// the /admin/results route is likewise only registered in dev (router.tsx).
+const ResultsAdminPage = import.meta.env.DEV
+  ? lazy(() =>
+      import('@/pages/admin/ResultsAdminPage').then((m) => ({
+        default: m.ResultsAdminPage,
+      })),
+    )
+  : null;
 
 export function LazyResultsAdminPage() {
+  if (!ResultsAdminPage) return null;
   return (
     <Suspense
       fallback={

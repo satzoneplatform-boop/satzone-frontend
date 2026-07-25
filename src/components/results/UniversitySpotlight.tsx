@@ -34,11 +34,17 @@ export function UniversitySpotlight({ results }: { results: UniversityResult[] }
   const count = results.length;
   const active = results[Math.min(index, count - 1)];
 
-  // Keep the selected avatar visible when paging with the arrows.
+  // Keep the selected avatar centered when paging with the arrows. This must
+  // scroll ONLY the strip: scrollIntoView also scrolls ancestors, which
+  // yanked the whole page down to this section on load.
   useEffect(() => {
     const strip = stripRef.current;
     const el = strip?.children[index] as HTMLElement | undefined;
-    el?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', inline: 'center', block: 'nearest' });
+    if (!strip || !el) return;
+    strip.scrollTo({
+      left: el.offsetLeft - (strip.clientWidth - el.clientWidth) / 2,
+      behavior: reduce ? 'auto' : 'smooth',
+    });
   }, [index, reduce]);
 
   if (!active) return null;

@@ -51,10 +51,10 @@ export const router = createBrowserRouter([
   // redirect (so authed users can still share / browse the public site).
   { path: '/', element: <LandingPage /> },
 
-  // Private Results CMS admin panel. Intentionally top-level (outside the app
-  // auth guards and dashboard shell) and never linked from navigation — it has
-  // its own shared-password gate. Reachable only by typing the URL directly.
-  { path: '/admin/results', element: <LazyResultsAdminPage /> },
+  // Local results editor — dev server only. Not in navigation; it edits the
+  // repo's results content through the dev-only middleware and the route
+  // simply doesn't exist in production builds.
+  ...(import.meta.env.DEV ? [{ path: '/admin/results', element: <LazyResultsAdminPage /> }] : []),
 
   // Always-public pages.
   { path: '/sign-up/check-email', element: <CheckEmailPage /> },

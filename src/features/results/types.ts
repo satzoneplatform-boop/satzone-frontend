@@ -1,12 +1,9 @@
 /**
- * DTOs for the Results CMS.
+ * Student result shapes shown on the landing page.
  *
- * These are the *only* contract the frontend depends on. The storage backend
- * (JSON files today, a database tomorrow) can change freely as long as the API
- * keeps returning these shapes — see server/store.js.
+ * The data itself lives in the repo (`src/content/results/*.json`, photos in
+ * `public/results/`) and ships inside the bundle — see src/content/results.
  */
-
-export type ResultCategory = 'university' | 'math';
 
 /** Fields shared by every result, regardless of category. */
 export interface BaseResult {
@@ -14,16 +11,15 @@ export interface BaseResult {
   studentName: string;
   photoUrl: string;
   testimonial?: string;
+  /** Unpublished entries stay in the JSON but never render. */
   published: boolean;
-  sortOrder: number;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface UniversityResult extends BaseResult {
   /** Optional — a strong score can be showcased before any acceptance. */
   universityName?: string;
   universityLogoUrl?: string;
+  /** Displayed as "Region" (viloyat) — JSON field name kept for data compat. */
   country: string;
   overallScore: number;
   /** Optional — see universityName. */
@@ -33,28 +29,7 @@ export interface UniversityResult extends BaseResult {
 export interface MathResult extends BaseResult {
   mathBefore: number;
   mathAfter: number;
-  /** Derived server-side: mathAfter - mathBefore. */
+  /** Derived in src/content/results: mathAfter - mathBefore. */
   improvement: number;
   overallScore?: number;
 }
-
-export type AnyResult = UniversityResult | MathResult;
-
-/** Result type for a given category discriminant. */
-export type ResultOf<C extends ResultCategory> = C extends 'university'
-  ? UniversityResult
-  : MathResult;
-
-/** Editable payloads (server assigns id/timestamps/sortOrder and derives improvement). */
-export type UniversityInput = Omit<
-  UniversityResult,
-  'id' | 'sortOrder' | 'createdAt' | 'updatedAt'
->;
-export type MathInput = Omit<
-  MathResult,
-  'id' | 'sortOrder' | 'createdAt' | 'updatedAt' | 'improvement'
->;
-
-export type ResultInput<C extends ResultCategory> = C extends 'university'
-  ? UniversityInput
-  : MathInput;

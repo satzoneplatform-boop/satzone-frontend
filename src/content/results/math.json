@@ -1,43 +1,34 @@
 {
   "results": [
     {
-      "id": "seed-math-1",
+      "id": "math-jasur-alimov",
       "studentName": "Jasur Alimov",
       "photoUrl": "https://images.unsplash.com/photo-1633332755192-727a05c4013d?auto=format&fit=facearea&facepad=2.4&w=640&h=640&q=80",
       "mathBefore": 560,
       "mathAfter": 760,
       "overallScore": 1420,
       "testimonial": "I went from dreading the Math section to finishing early with time to check my work.",
-      "published": true,
-      "sortOrder": 0,
-      "createdAt": "2026-01-13T09:00:00.000Z",
-      "updatedAt": "2026-01-13T09:00:00.000Z"
+      "published": true
     },
     {
-      "id": "seed-math-2",
+      "id": "math-malika-yusupova",
       "studentName": "Malika Yusupova",
       "photoUrl": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=facearea&facepad=2.6&w=640&h=640&q=80",
       "mathBefore": 610,
       "mathAfter": 780,
       "overallScore": 1450,
       "testimonial": "The way they break down each problem type finally made algebra click for me.",
-      "published": true,
-      "sortOrder": 1,
-      "createdAt": "2026-01-14T09:00:00.000Z",
-      "updatedAt": "2026-01-14T09:00:00.000Z"
+      "published": true
     },
     {
-      "id": "seed-math-3",
+      "id": "math-timur-bekov",
       "studentName": "Timur Bekov",
       "photoUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=facearea&facepad=2.4&w=640&h=640&q=80",
       "mathBefore": 480,
       "mathAfter": 700,
       "overallScore": 1310,
       "testimonial": "A 220-point jump in Math I honestly did not think was possible in a few months.",
-      "published": true,
-      "sortOrder": 2,
-      "createdAt": "2026-01-15T09:00:00.000Z",
-      "updatedAt": "2026-01-15T09:00:00.000Z"
+      "published": true
     }
   ]
 }

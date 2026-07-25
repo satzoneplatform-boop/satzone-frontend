@@ -1,22 +1,19 @@
 {
   "results": [
     {
-      "id": "seed-uni-1",
+      "id": "uni-ilya-monesy",
       "studentName": "ilya monesy",
-      "photoUrl": "/uploads/students/c6c4c6fc-ac91-4582-af84-41c260a33a4d.webp",
+      "photoUrl": "/results/ilya-monesy.webp",
       "universityName": "new uzbekistan University",
-      "universityLogoUrl": "/uploads/students/4ced0c40-9b6b-4164-a16f-53796d4c81b1.webp",
+      "universityLogoUrl": "/results/new-uzbekistan-university.webp",
       "country": "Srydarya",
       "overallScore": 1520,
       "acceptanceStatus": "Accepted",
       "testimonial": "Falcons champion",
-      "published": true,
-      "sortOrder": 0,
-      "createdAt": "2026-01-10T09:00:00.000Z",
-      "updatedAt": "2026-07-15T09:21:03.868Z"
+      "published": true
     },
     {
-      "id": "seed-uni-2",
+      "id": "uni-daniyar-toktarov",
       "studentName": "Daniyar Toktarov",
       "photoUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=facearea&facepad=2.4&w=640&h=640&q=80",
       "universityName": "University of Toronto",
@@ -25,13 +22,10 @@
       "overallScore": 1490,
       "acceptanceStatus": "Full Scholarship",
       "testimonial": "Every session had a clear purpose. I walked into test day knowing exactly what to expect.",
-      "published": true,
-      "sortOrder": 1,
-      "createdAt": "2026-01-11T09:00:00.000Z",
-      "updatedAt": "2026-01-11T09:00:00.000Z"
+      "published": true
     },
     {
-      "id": "seed-uni-3",
+      "id": "uni-sofia-rahimova",
       "studentName": "Sofia Rahimova",
       "photoUrl": "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=facearea&facepad=2.4&w=640&h=640&q=80",
       "universityName": "Bocconi University",
@@ -40,10 +34,7 @@
       "overallScore": 1530,
       "acceptanceStatus": "Accepted",
       "testimonial": "The mock tests mirrored the real thing so closely that the actual SAT felt routine.",
-      "published": true,
-      "sortOrder": 2,
-      "createdAt": "2026-01-12T09:00:00.000Z",
-      "updatedAt": "2026-01-12T09:00:00.000Z"
+      "published": true
     }
   ]
 }
