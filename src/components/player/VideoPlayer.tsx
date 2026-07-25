@@ -157,9 +157,23 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
         // the same `?t=` query string.
         autoStartLoad: true,
         capLevelToPlayerSize: true,
-        // Resume a re-attached session at the previous position (-1 = from
-        // the start / live edge default).
-        startPosition: resume && resume.time > 1 ? resume.time : -1,
+        // Fresh attach starts at 0; a re-mint resumes at the saved position.
+        //
+        // For enrolled students the backend serves a *sliding*
+        // `EXT-X-PLAYLIST-TYPE:EVENT` manifest with no `ENDLIST` (only
+        // segments up to `watermark + LOOKAHEAD` are exposed). hls.js treats
+        // any playlist without `ENDLIST` as **live**, and the default
+        // `startPosition: -1` then starts at the *live edge* — ~30 s into the
+        // initial ~48 s window. That is fatal here: jumping to the edge burns
+        // the free look-ahead segments without banking any watch time, so the
+        // next segment fetch trips the server's anti-fast-forward gate
+        // (HTTP 429 `segment_rate_exceeded`) and playback stalls at the edge —
+        // the "long/gated videos won't open" bug. Free-preview and
+        // owner/admin viewers get a full VOD manifest (with `ENDLIST`) and are
+        // unaffected — `0` is already the VOD default. Starting at 0 lets the
+        // viewer watch the opening window in real time, accumulate credit, and
+        // keep the sliding window ahead of the playhead.
+        startPosition: resume && resume.time > 1 ? resume.time : 0,
         // Long lessons: hls.js keeps EVERYTHING behind the playhead by
         // default (backBufferLength: Infinity). Over an hour-long video
         // that exhausts memory on modest devices — the classic
