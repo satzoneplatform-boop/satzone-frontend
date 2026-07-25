@@ -213,7 +213,25 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
       let buffered = 0;
       hls.on(Hls.Events.FRAG_BUFFERED, () => {
         buffered += 1;
-        if (buffered === 1) console.info('[lesson-player] first fragment buffered — media pipeline OK');
+        if (buffered === 1) {
+          console.info('[lesson-player] first fragment buffered — media pipeline OK');
+          // Proactively close a start gap: if the first buffered range begins
+          // after the playhead (non-zero start PTS on remuxed segments), move
+          // the playhead onto the data so playback can actually begin instead
+          // of stalling at 0 and re-fetching the opening segment forever.
+          try {
+            const b = video.buffered;
+            if (
+              b.length > 0 &&
+              video.currentTime < b.start(0) - 0.1 &&
+              (!resume || resume.time <= 1)
+            ) {
+              video.currentTime = b.start(0) + 0.01;
+            }
+          } catch {
+            /* buffered/currentTime not ready yet — the stall handler covers it */
+          }
+        }
       });
 
       // Bounded to 4 fatals per src — covers transient network drops,
@@ -252,15 +270,33 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
         }
 
         if (!data.fatal) {
-          // Non-fatal buffer stall: nudge the playhead so a transient gap
-          // doesn't leave the video frozen with no visible error.
+          // Non-fatal buffer stall: get the playhead back onto buffered data.
           if (
             data.details === Hls.ErrorDetails.BUFFER_STALLED_ERROR &&
             video &&
             !video.paused
           ) {
             try {
-              video.currentTime += 0.1;
+              // Stream-copied (remuxed) segments can carry a non-zero start
+              // PTS, so the media timeline begins a few seconds in rather than
+              // at 0. The playhead then sits in the gap *before* the first
+              // buffered range and never enters it — hls.js keeps re-fetching
+              // the opening segment forever (it downloads 200 OK but can't be
+              // played), which is the "long lesson won't open, first segment
+              // requested again and again" failure. A fixed +0.1s nudge can
+              // never close a multi-second start gap, so when the playhead is
+              // behind buffered data, seek directly into it. VLC masks this by
+              // starting playback wherever the media actually begins.
+              const b = video.buffered;
+              let jumped = false;
+              for (let i = 0; i < b.length; i++) {
+                if (video.currentTime < b.start(i) - 0.1) {
+                  video.currentTime = b.start(i) + 0.01;
+                  jumped = true;
+                  break;
+                }
+              }
+              if (!jumped) video.currentTime += 0.1;
             } catch {
               /* currentTime may be unseekable at the window edge — ignore */
             }
