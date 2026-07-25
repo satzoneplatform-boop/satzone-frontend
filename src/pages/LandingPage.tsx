@@ -13,7 +13,6 @@ import {
   CheckIcon,
   ClockIcon,
   FlagIcon,
-  LightbulbIcon,
   PathIcon,
   StarIcon,
   TrendingUpIcon,
@@ -26,7 +25,7 @@ import { Stagger, StaggerItem } from '@/components/motion/Stagger';
 import { staggerContainer, transitions } from '@/components/motion/variants';
 import { ResultsSection } from '@/components/results/ResultsSection';
 import { instructor } from '@/components/auth/marketing/config';
-import { UZ_CITIES, UZ_OUTLINE_PATH, UZ_VIEWBOX } from '@/components/brand/uzbekistanOutline';
+import { UZ_CITIES, UZ_OUTLINE_PATH, UZ_POP_POINTS, UZ_VIEWBOX } from '@/components/brand/uzbekistanOutline';
 import { useAuth } from '@/features/auth/AuthProvider';
 import { useT } from '@/i18n/I18nProvider';
 import { cn } from '@/lib/cn';
@@ -35,9 +34,9 @@ import { cn } from '@/lib/cn';
  * Public marketing landing page shown at `/`.
  *
  * Rebuilt for the SATZONE brand: deep-navy hero with animated gradient mesh,
- * an animated SAT score dashboard, count-up proof metrics, a Learn → Practice
- * → Prepare → Achieve journey, instructor spotlight, and live CMS-managed
- * results. Authed users redirect to the dashboard.
+ * an animated SAT score dashboard, count-up proof metrics, a rocket-flown
+ * score climb over the three steps, instructor spotlight, and repo-managed
+ * student results. Authed users redirect to the dashboard.
  */
 export function LandingPage() {
   const { user, status } = useAuth();
@@ -78,17 +77,16 @@ export function LandingPage() {
       <PublicTopBar />
       <main className="flex-1">
         {/* Conversion-funnel order: promise (hero) → instant credibility
-            (metrics floating over the hero edge) → the plan (summit + 3
-            steps) → exam expertise (blueprint ticker) → product (features →
-            demo video) → transformation story (journey) → the guide
-            (instructor) → strongest social proof (results) → the ask. */}
+            (metrics floating over the hero edge) → the plan (summit rocket +
+            3 steps) → exam expertise (blueprint ticker) → product (features →
+            demo video) → the guide (instructor) → strongest social proof
+            (results) → the ask. */}
         <HeroSection />
         <MetricsBand />
         <SummitSection />
         <BlueprintStrip />
         <FeaturesSection />
         <DemoSection />
-        <JourneySection />
         <InstructorSection />
         <ResultsSection />
         <FinalCtaSection />
@@ -370,29 +368,50 @@ function UzbekistanMap({ className }: { className?: string }) {
  * and far-side descent give the mountain depth.
  */
 /**
- * Rotating result callouts around the hero map. Three fixed slots sit in the
- * empty "sea" around the country (sky north-west, sky north-east, desert
- * south-west); each one's dotted line points at a real — never named — town,
- * and its content (random first name + overall score) swaps one slot at a
- * time so the map always feels alive. Decorative sample data → aria-hidden.
+ * Rotating result callouts pinned to the hero map. Three speech-bubble chips
+ * sit directly over real — never named — towns, each with a triangular tail
+ * whose tip touches its town. Every swap sends that bubble to a NEW random
+ * town from UZ_POP_POINTS (never one another bubble occupies), so results
+ * appear all over the country instead of a fixed few spots. One bubble swaps
+ * at a time. Decorative sample data → aria-hidden.
  */
-const CALLOUTS = [
-  // → Nukus
-  { chip: 'left-[30%] top-[1%]', line: 'M300 56 L180 186' },
-  // → Tashkent
-  { chip: 'left-[68%] top-[3%]', line: 'M610 66 L618 258' },
-  // → Bukhara
-  { chip: 'left-[8%] top-[80%]', line: 'M212 434 L384 366' },
-] as const;
+const CALLOUT_SLOTS = [0, 1, 2] as const;
+/** Starting towns: far west, far east, deep south — instant spread. */
+const INITIAL_TARGETS = [1, 0, 6];
 
 function MapCallouts() {
   const t = useT();
   const reduce = useReducedMotion();
   const [tick, setTick] = useState(0);
+  const [targets, setTargets] = useState<number[]>(INITIAL_TARGETS);
 
   useEffect(() => {
     if (reduce) return;
-    const id = setInterval(() => setTick(i => i + 1), 3000);
+    let ticks = 0;
+    const id = setInterval(() => {
+      ticks += 1;
+      // Exactly one slot's phase advances per tick (see contentFor); send
+      // that bubble to a random town far enough from the other bubbles that
+      // chips can't overlap (several real towns cluster in the east).
+      const slot = (3 - (ticks % 3)) % 3;
+      setTargets((prev) => {
+        const clear = (i: number) =>
+          prev.every((cur, s) => {
+            if (s === slot) return true;
+            const a = UZ_POP_POINTS[i];
+            const b = UZ_POP_POINTS[cur];
+            return Math.hypot(a.x - b.x, a.y - b.y) > 140;
+          });
+        let pick = prev[slot];
+        for (let guard = 0; guard < 50 && (pick === prev[slot] || !clear(pick)); guard++) {
+          pick = Math.floor(Math.random() * UZ_POP_POINTS.length);
+        }
+        const next = [...prev];
+        next[slot] = pick;
+        return next;
+      });
+      setTick(ticks);
+    }, 3000);
     return () => clearInterval(id);
   }, [reduce]);
 
@@ -411,36 +430,37 @@ function MapCallouts() {
 
   return (
     <div className="pointer-events-none absolute inset-0 z-10" aria-hidden>
-      {/* Dotted pointer lines, drawn on the map's own canvas */}
-      <svg viewBox="0 0 800 523" className="absolute inset-0 h-full w-full" fill="none">
-        {CALLOUTS.map((c, i) => (
-          <motion.path
-            key={c.line}
-            d={c.line}
-            stroke="var(--color-accent-400)"
-            strokeOpacity={0.5}
-            strokeWidth={2}
-            strokeLinecap="round"
-            strokeDasharray="1 7"
-            initial={reduce ? undefined : { pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1 }}
-            transition={{ duration: 0.8, ease: 'easeInOut', delay: 1.9 + i * 0.25 }}
-          />
-        ))}
-      </svg>
-
-      {CALLOUTS.map((c, i) => {
-        const { phase, name, score } = contentFor(i);
+      {CALLOUT_SLOTS.map((slot) => {
+        const { phase, name, score } = contentFor(slot);
+        const town = UZ_POP_POINTS[targets[slot]];
+        // Keep wide chips on-canvas near the map edges; the tail below stays
+        // glued to the town no matter how the chip itself is shifted.
+        const chipShift = town.x > 690 ? '-82%' : town.x < 140 ? '-18%' : '-50%';
         return (
-          <div key={c.line} className={cn('absolute', c.chip)}>
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={phase}
-                initial={reduce ? { opacity: 0 } : { opacity: 0, y: 10, scale: 0.85 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={reduce ? { opacity: 0 } : { opacity: 0, y: -8, scale: 0.9 }}
-                transition={{ type: 'spring', stiffness: 320, damping: 26 }}
-                className="flex items-center gap-2 whitespace-nowrap rounded-xl border border-white/10 bg-navy-900/85 py-1.5 pl-1.5 pr-3 shadow-[0_14px_36px_-10px_rgb(8_16_38/0.85)] backdrop-blur-md"
+          <AnimatePresence key={slot} mode="wait">
+            <motion.div
+              key={phase}
+              className="absolute"
+              style={{ left: `${(town.x / 800) * 100}%`, top: `${(town.y / 523) * 100}%` }}
+              initial={reduce ? { opacity: 0 } : { opacity: 0, y: 10, scale: 0.85 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={reduce ? { opacity: 0 } : { opacity: 0, y: -8, scale: 0.9 }}
+              transition={{
+                type: 'spring',
+                stiffness: 320,
+                damping: 26,
+                delay: tick === 0 ? 2 + slot * 0.25 : 0,
+              }}
+            >
+              {/* Town marker under the tail tip */}
+              <span className="absolute left-0 top-0 size-2.5 -translate-x-1/2 -translate-y-1/2 animate-ping rounded-full bg-accent-400/60" />
+              <span className="absolute left-0 top-0 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-400 shadow-[0_0_10px_2px_rgb(56_189_248/0.6)]" />
+              {/* Tail — triangle tip aimed straight down at the town */}
+              <span className="absolute -top-[13px] left-0 -translate-x-1/2 border-x-[7px] border-t-[9px] border-x-transparent border-t-navy-900/85" />
+              {/* The bubble itself */}
+              <span
+                className="absolute bottom-[12px] flex items-center gap-2 whitespace-nowrap rounded-xl border border-white/10 bg-navy-900/85 py-1.5 pl-1.5 pr-3 shadow-[0_14px_36px_-10px_rgb(8_16_38/0.85)] backdrop-blur-md"
+                style={{ transform: `translateX(${chipShift})` }}
               >
                 <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-brand-500 to-accent-500 text-[11px] font-bold text-white">
                   {name.charAt(0)}
@@ -452,9 +472,9 @@ function MapCallouts() {
                     <TrendingUpIcon className="size-3 text-success-500" />
                   </span>
                 </span>
-              </motion.span>
-            </AnimatePresence>
-          </div>
+              </span>
+            </motion.div>
+          </AnimatePresence>
         );
       })}
     </div>
@@ -469,11 +489,10 @@ const POP_SCORES = ['1480', '1520', '1450', '1560', '1500', '1430', '1540', '147
 /* -------------------------------------------------------------------------- */
 
 /**
- * The mountain-climb story merged with the three "how it works" steps, right
- * under the hero: a wide neon range whose ridge is the score journey. Each
- * knee of the climb sits exactly above its step card in the grid below —
- * milestone scores over steps 1 and 2, and the flagged summit with the dream
- * result over step 3.
+ * The rocket-flight story merged with the three "how it works" steps, right
+ * under the hero: a neon trajectory that IS the score journey. Each
+ * checkpoint sits exactly above its step card in the grid below — milestone
+ * scores over steps 1 and 2, and the Moon with the dream result over step 3.
  */
 function SummitSection() {
   const t = useT();
@@ -495,15 +514,15 @@ function SummitSection() {
           {/* Anchor wrapper holds ONLY the range + score block, so the
               %-based summit anchor isn't skewed by the card grid below. */}
           <div className="relative">
-          {/* Dream score over the peak: static above the range on phones,
-              anchored to the summit flag from sm up. Appears only once the
-              drawing tip of the ridge arrives at the peak (0.9s + 1.6s). */}
+          {/* Dream score over the Moon: static above the scene on phones,
+              floating just above the moon from sm up. Appears the moment the
+              rocket touches down (0.9s delay + 1.6s flight). */}
           <motion.div
             initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.9 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ delay: 2.55, type: 'spring', stiffness: 240, damping: 18 }}
-            className="relative z-10 mx-auto w-max text-center sm:absolute sm:bottom-[calc(71.15%+46px)] sm:left-[83.3%] sm:mx-0 sm:-translate-x-1/2"
+            className="relative z-10 mx-auto w-max text-center sm:absolute sm:bottom-[calc(81.2%+10px)] sm:left-[83.3%] sm:mx-0 sm:-translate-x-1/2"
           >
             <div className="brand-glow absolute -inset-x-16 -inset-y-10 -z-10" aria-hidden />
             <StarIcon
@@ -529,7 +548,7 @@ function SummitSection() {
             </p>
           </motion.div>
 
-          <MountainRange className="lp-tree-glow mt-4 w-full sm:mt-0" />
+          <RocketClimb className="lp-tree-glow mt-4 w-full sm:mt-0" />
           </div>
 
           {/* The three steps of the climb — each card sits under its knee
@@ -558,19 +577,21 @@ function SummitSection() {
 }
 
 /**
- * The neon range itself: milestone ridge, back peaks, flag on the summit.
- * Knees land at x=150 / 450 and the summit at x=750 — exactly 1/6, 1/2 and
- * 5/6 of the 900-unit canvas — so each aligns with its step card below.
+ * The score journey, flown: a rocket lifts off the valley floor, passes the
+ * milestone scores, and lands on the Moon under the 1590 dream score — where
+ * it stays parked for good (flame off, nose to the surface). Pure sky, no
+ * mountains. Checkpoints land at x=150 / 450 and the Moon at x=750 — exactly
+ * 1/6, 1/2 and 5/6 of the 900-unit canvas — so each aligns with its step
+ * card below. The trajectory endpoint sits ON the moon's lower-left edge
+ * (center 770,128, r=30), so the flight needs no separate landing move.
  */
-const RIDGE =
-  'M30 500 L100 455 L150 400 L205 428 L290 345 L340 372 L450 255 ' +
-  'L505 285 L600 210 L645 235 L750 150';
-const FAR_SIDE = 'M750 150 L805 240 L850 350 L880 505';
-const BACK_PEAK = 'M350 505 L520 300 L580 365 L690 505';
-const DISTANT = 'M0 495 L70 448 L130 482 L200 452 L260 494';
+const TRAJECTORY =
+  'M60 470 C100 462 128 448 150 430 C230 392 370 325 450 280 ' +
+  'C540 230 660 188 750 150';
 
-function MountainRange({ className }: { className?: string }) {
+function RocketClimb({ className }: { className?: string }) {
   const reduce = useReducedMotion();
+  const [landed, setLanded] = useState(false);
   const viewport = { once: true, amount: 0.35 } as const;
   const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -588,39 +609,28 @@ function MountainRange({ className }: { className?: string }) {
     style: { transformBox: 'fill-box' as const, transformOrigin: '50% 100%' },
   });
 
-  // The ridge draws LINEARLY over 1.6s from t=0.9, so each milestone pops
-  // exactly when the drawing tip arrives: delay = 0.9 + 1.6 × (its fraction
-  // of the total ridge path length — 17% and 60% respectively).
+  // The trajectory draws LINEARLY over 1.6s from t=0.9 with the rocket riding
+  // its tip, so each milestone pops exactly as the rocket passes: delay =
+  // 0.9 + 1.6 × (its fraction of the total path length — 13% and 57%).
   const milestones = [
-    { x: 150, y: 400, label: '1250', at: 1.17 },
-    { x: 450, y: 255, label: '1380', at: 1.86 },
+    { x: 150, y: 430, label: '1250', at: 1.11 },
+    { x: 450, y: 280, label: '1380', at: 1.81 },
   ] as const;
 
   return (
     <svg viewBox="0 0 900 520" className={className} fill="none" aria-hidden>
       <defs>
         <linearGradient
-          id="lp-ridge-stroke"
+          id="lp-flight-stroke"
           gradientUnits="userSpaceOnUse"
-          x1="30"
-          y1="500"
+          x1="60"
+          y1="470"
           x2="750"
           y2="150"
         >
           <stop offset="0%" stopColor="var(--color-brand-500)" stopOpacity="0.25" />
           <stop offset="55%" stopColor="var(--color-brand-400)" stopOpacity="0.7" />
           <stop offset="100%" stopColor="var(--color-accent-400)" />
-        </linearGradient>
-        <linearGradient
-          id="lp-mountain-fill"
-          gradientUnits="userSpaceOnUse"
-          x1="0"
-          y1="150"
-          x2="0"
-          y2="520"
-        >
-          <stop offset="0%" stopColor="var(--color-accent-400)" stopOpacity="0.14" />
-          <stop offset="100%" stopColor="var(--color-accent-400)" stopOpacity="0" />
         </linearGradient>
         <linearGradient
           id="lp-summit-ground"
@@ -635,51 +645,40 @@ function MountainRange({ className }: { className?: string }) {
           <stop offset="82%" stopColor="var(--color-accent-400)" stopOpacity="0.45" />
           <stop offset="100%" stopColor="var(--color-accent-500)" stopOpacity="0" />
         </linearGradient>
+        <radialGradient id="lp-moon-fill" cx="38%" cy="32%" r="78%">
+          <stop offset="0%" stopColor="#f5f9ff" />
+          <stop offset="55%" stopColor="var(--color-brand-100)" />
+          <stop offset="100%" stopColor="var(--color-brand-300)" />
+        </radialGradient>
       </defs>
 
-      {/* Ground + distant range + back peak, farthest first */}
+      {/* Ground line the launch pad sits on */}
       <motion.path d="M20 514 H880" stroke="url(#lp-summit-ground)" strokeWidth={2} {...draw(0, 1.2)} />
+
+      {/* The Moon — the destination; the rocket lands here and stays */}
+      <motion.g {...pop(0.5)} style={{ transformBox: 'fill-box', transformOrigin: '50% 50%' }}>
+        <circle cx={770} cy={128} r={42} fill="var(--color-accent-400)" fillOpacity={0.1} />
+        <circle cx={770} cy={128} r={30} fill="url(#lp-moon-fill)" />
+        <circle cx={760} cy={116} r={6} fill="var(--color-brand-300)" fillOpacity={0.4} />
+        <circle cx={781} cy={137} r={4.5} fill="var(--color-brand-300)" fillOpacity={0.35} />
+        <circle cx={766} cy={140} r={3} fill="var(--color-brand-300)" fillOpacity={0.3} />
+        <circle cx={784} cy={119} r={2.5} fill="var(--color-brand-300)" fillOpacity={0.35} />
+      </motion.g>
+
+      {/* Launch pad on the valley floor */}
       <motion.path
-        d={DISTANT}
+        d="M38 470 H92"
         stroke="var(--color-accent-400)"
-        strokeOpacity={0.15}
+        strokeOpacity={0.3}
         strokeWidth={2}
-        strokeLinejoin="round"
-        {...draw(0.5, 0.9)}
-      />
-      <motion.path
-        d={BACK_PEAK}
-        stroke="var(--color-accent-400)"
-        strokeOpacity={0.22}
-        strokeWidth={2}
-        strokeLinejoin="round"
-        {...draw(0.7, 1)}
+        {...draw(0.6, 0.3)}
       />
 
-      {/* Mountain body */}
+      {/* The flight path — the score journey. Linear so time maps 1:1 to
+          distance along the path (milestones sync to the rocket). */}
       <motion.path
-        d={`${RIDGE} ${FAR_SIDE.replace('M750 150 ', '')} L880 514 L30 514 Z`}
-        fill="url(#lp-mountain-fill)"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={viewport}
-        transition={{ delay: 2.6, duration: 1.2 }}
-      />
-      <motion.path
-        d={FAR_SIDE}
-        stroke="var(--color-accent-400)"
-        strokeOpacity={0.35}
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        {...draw(2.5, 0.9)}
-      />
-
-      {/* The climbing ridge — the score journey. Linear so time maps 1:1
-          to distance along the path (milestones sync to the drawing tip). */}
-      <motion.path
-        d={RIDGE}
-        stroke="url(#lp-ridge-stroke)"
+        d={TRAJECTORY}
+        stroke="url(#lp-flight-stroke)"
         strokeWidth={3.5}
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -690,7 +689,74 @@ function MountainRange({ className }: { className?: string }) {
         transition={{ delay: 0.9, duration: 1.6, ease: 'linear' }}
       />
 
-      {/* Milestone scores appear the moment the drawing tip reaches them */}
+      {/* Exhaust puffs at liftoff */}
+      {!reduce && (
+        <>
+          <motion.circle
+            cx={54}
+            cy={466}
+            r={9}
+            fill="#fff"
+            initial={{ opacity: 0, scale: 0.3 }}
+            whileInView={{ opacity: [0, 0.4, 0], scale: [0.3, 1.7, 2] }}
+            viewport={viewport}
+            transition={{ delay: 0.95, duration: 1.1, times: [0, 0.25, 1] }}
+            style={{ transformBox: 'fill-box', transformOrigin: '50% 50%' }}
+          />
+          <motion.circle
+            cx={74}
+            cy={470}
+            r={6}
+            fill="#fff"
+            initial={{ opacity: 0, scale: 0.3 }}
+            whileInView={{ opacity: [0, 0.3, 0], scale: [0.3, 1.6, 1.9] }}
+            viewport={viewport}
+            transition={{ delay: 1.1, duration: 1, times: [0, 0.25, 1] }}
+            style={{ transformBox: 'fill-box', transformOrigin: '50% 50%' }}
+          />
+        </>
+      )}
+
+      {/* The rocket — one flight, nose leading the trail tip, ending parked
+          on the Moon for good (the flame cuts out on touchdown). Under
+          reduced motion it renders already landed — either way it never
+          leaves the page. */}
+      <motion.g
+        className="lp-growth-glow"
+        style={{
+          offsetPath: `path("${TRAJECTORY}")`,
+          offsetRotate: 'auto',
+          ...(reduce ? { offsetDistance: '100%' } : {}),
+        }}
+        initial={reduce ? undefined : { offsetDistance: '0%', opacity: 0 }}
+        whileInView={reduce ? undefined : { offsetDistance: '100%', opacity: 1 }}
+        viewport={viewport}
+        transition={{
+          delay: 0.9,
+          duration: 1.6,
+          ease: 'linear',
+          opacity: { delay: 0.9, duration: 0.2 },
+        }}
+        onAnimationComplete={() => setLanded(true)}
+      >
+        {/* Artwork shifted back so the NOSE rides the trajectory tip and
+            rests against the moon's surface after touchdown. */}
+        <g transform="translate(-16 0)">
+          {!reduce && !landed && (
+            <path
+              className="lp-rocket-flame"
+              d="M-13 0 C-20 -3.5 -26 -1.5 -31 0 C-26 1.5 -20 3.5 -13 0 Z"
+              fill="var(--color-accent-400)"
+              fillOpacity={0.9}
+            />
+          )}
+          <path d="M16 0 C11 -6 2 -7 -9 -5 L-13 0 L-9 5 C2 7 11 6 16 0 Z" fill="#fff" />
+          <circle cx={4} cy={0} r={2.8} fill="var(--color-navy-900)" />
+          <path d="M-8 -5 L-15 -10 L-11 0 L-15 10 L-8 5" fill="var(--color-brand-400)" />
+        </g>
+      </motion.g>
+
+      {/* Milestone scores appear the moment the rocket passes them */}
       {milestones.map((m) => (
         <motion.g key={m.label} {...pop(m.at)}>
           <circle
@@ -714,46 +780,6 @@ function MountainRange({ className }: { className?: string }) {
         </motion.g>
       ))}
 
-      {/* Summit flag — planted the moment the tip reaches the peak */}
-      <motion.g
-        {...pop(2.5)}
-        className="lp-growth-glow"
-      >
-        <path
-          d="M750 150 L750 110"
-          stroke="#fff"
-          strokeOpacity={0.9}
-          strokeWidth={2.5}
-          strokeLinecap="round"
-        />
-        <path d="M750 110 L780 120 L750 130 Z" fill="var(--color-accent-400)" />
-        <circle
-          cx={750}
-          cy={150}
-          r={16}
-          fill="var(--color-accent-400)"
-          fillOpacity={0.3}
-          className="lp-node-ping"
-        />
-        <circle cx={750} cy={150} r={4.5} fill="var(--color-accent-400)" />
-      </motion.g>
-
-      {/* Endless light pulse climbing the ridge */}
-      {!reduce && (
-        <motion.path
-          d={RIDGE}
-          pathLength={100}
-          stroke="#fff"
-          strokeOpacity={0.9}
-          strokeWidth={4}
-          strokeLinecap="round"
-          className="lp-growth-pulse lp-growth-glow"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={viewport}
-          transition={{ delay: 2.8, duration: 0.6 }}
-        />
-      )}
     </svg>
   );
 }
@@ -1070,263 +1096,6 @@ function DemoSection() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Journey — Learn → Practice → Prepare → Achieve                             */
-/* -------------------------------------------------------------------------- */
-
-function JourneySection() {
-  const t = useT();
-  const stages = [
-    { key: 'j1', icon: <BookIcon className="size-6" />, stage: 'acorn' as const },
-    { key: 'j2', icon: <LightbulbIcon className="size-6" />, stage: 'sprout' as const },
-    { key: 'j3', icon: <FlagIcon className="size-6" />, stage: 'sapling' as const },
-    { key: 'j4', icon: <StarIcon className="size-6" />, stage: 'tree' as const },
-  ] as const;
-
-  return (
-    // Top half of the navy band — flows seamlessly into InstructorSection.
-    <section id="journey" className="relative overflow-hidden py-24 text-white">
-      <div className="lp-orb lp-orb--a absolute -left-20 top-16 h-72 w-72 bg-brand-500/20" />
-      <div className="lp-orb lp-orb--c absolute -right-16 bottom-24 h-80 w-80 bg-accent-500/15" />
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-wider text-brand-300">
-            {t('landing.nav.howItWorks')}
-          </p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-            {t('landing.journey.title')}
-          </h2>
-          <p className="mt-4 text-base text-white/60">{t('landing.journey.subtitle')}</p>
-        </Reveal>
-
-        {/* Growth motif — the acorn grows into a tree as it scrolls into view */}
-        <GrowingTree />
-
-        <Stagger className="mt-10 grid gap-5 sm:mt-6 sm:grid-cols-2 lg:grid-cols-4" stagger={0.12}>
-          {stages.map((s, i) => (
-            <StaggerItem key={s.key}>
-              <div className="lp-card group relative h-full rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur hover:-translate-y-1.5 hover:border-white/20 hover:bg-white/[0.07]">
-                <span className="text-xs font-bold text-white/30">
-                  0{i + 1}
-                </span>
-                <div className="lp-icon mt-2 grid size-12 place-items-center rounded-xl bg-brand-500/15 text-brand-300 group-hover:bg-brand-500/25 group-hover:text-brand-200">
-                  {s.icon}
-                </div>
-                <h3 className="mt-4 text-lg font-semibold">
-                  {t(`landing.journey.${s.key}.title` as never)}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/60">
-                  {t(`landing.journey.${s.key}.body` as never)}
-                </p>
-              </div>
-            </StaggerItem>
-          ))}
-        </Stagger>
-      </div>
-    </section>
-  );
-}
-
-/**
- * The brand story drawn live, in neon: a glowing ground line climbs left →
- * right with an endless light pulse riding it, and the four growth stages
- * (acorn → sprout → sapling → fruiting tree) draw themselves in sequence,
- * each bigger and higher up the slope than the last. The drawings are
- * deliberate line-art — mirrored curves, straight trunks, true circles,
- * uniform stroke weight — and grow strictly one stage at a time, each
- * completing before the next begins. Static (fully grown) under reduced
- * motion.
- */
-function GrowingTree() {
-  const reduce = useReducedMotion();
-  const viewport = { once: true, amount: 0.35 } as const;
-  const ease = [0.22, 1, 0.36, 1] as const;
-
-  /** Stroke that draws itself in. */
-  const draw = (delay: number, duration = 0.7) => ({
-    initial: reduce ? undefined : { pathLength: 0, opacity: 0 },
-    whileInView: { pathLength: 1, opacity: 1 },
-    viewport,
-    transition: { delay, duration, ease },
-  });
-  /** Element that springs up from its base. */
-  const pop = (delay: number) => ({
-    initial: reduce ? undefined : { scale: 0, opacity: 0 },
-    whileInView: { scale: 1, opacity: 1 },
-    viewport,
-    transition: { delay, type: 'spring' as const, stiffness: 260, damping: 18 },
-    style: { transformBox: 'fill-box' as const, transformOrigin: '50% 100%' },
-  });
-
-  // Strict step-by-step choreography: the ground line sweeps first (linear,
-  // so each root dot pops exactly as the line passes it), then the four
-  // stages grow ONE AT A TIME — a stage finishes before the next begins.
-  const STAGE = [1.5, 2.4, 3.3, 4.55] as const;
-  // Dot arrival = ground delay 0.2 + 1.2s × (x − 16) / 768.
-  const DOT_AT = [0.33, 0.64, 0.96, 1.27] as const;
-
-  // The rising slope each stage stands on (matches the card grid below).
-  const GROUND =
-    'M16 222 C110 217 205 211 300 206 C395 201 405 199 500 194 ' +
-    'C595 189 605 185 700 176 C734 173 762 168 784 163';
-  const bases = [
-    [100, 218],
-    [300, 206],
-    [500, 194],
-    [700, 176],
-  ] as const;
-
-  return (
-    // Full-width of the card grid so each growth stage stands above its own
-    // card. Hidden on phones — at that scale the drawings shrink to noise.
-    <div className="relative mb-2 mt-14 hidden sm:block">
-      <svg
-        viewBox="0 0 800 250"
-        className="lp-tree-glow w-full"
-        fill="none"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden
-      >
-        <defs>
-          {/* userSpaceOnUse: a near-horizontal line has a degenerate bounding
-              box, which makes objectBoundingBox gradients render nothing. */}
-          <linearGradient id="growth-ground" gradientUnits="userSpaceOnUse" x1="16" y1="222" x2="784" y2="163">
-            <stop offset="0%" stopColor="var(--color-brand-500)" stopOpacity="0" />
-            <stop offset="18%" stopColor="var(--color-brand-400)" stopOpacity="0.55" />
-            <stop offset="82%" stopColor="var(--color-accent-400)" stopOpacity="0.55" />
-            <stop offset="100%" stopColor="var(--color-accent-500)" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-
-        {/* Rising neon ground line — linear so time maps to distance */}
-        <motion.path
-          d={GROUND}
-          stroke="url(#growth-ground)"
-          strokeWidth={2.5}
-          initial={reduce ? undefined : { pathLength: 0, opacity: 0 }}
-          whileInView={{ pathLength: 1, opacity: 1 }}
-          viewport={viewport}
-          transition={{ delay: 0.2, duration: 1.2, ease: 'linear' }}
-        />
-
-        {/* Endless light pulse riding the slope */}
-        {!reduce && (
-          <motion.path
-            d={GROUND}
-            pathLength={100}
-            stroke="#fff"
-            strokeOpacity={0.85}
-            strokeWidth={3}
-            className="lp-growth-pulse"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={viewport}
-            transition={{ delay: 1.5, duration: 0.6 }}
-          />
-        )}
-
-        {/* Root nodes pop exactly as the sweeping line reaches them */}
-        {bases.map(([x, y], i) => (
-          <motion.circle key={`dot-${x}`} cx={x} cy={y} r={5} className="fill-accent-400" {...pop(DOT_AT[i])} />
-        ))}
-
-        {/* Precise, symmetric line-art: uniform strokes, mirrored curves,
-            true circles — drawn strictly one stage at a time. */}
-        <g stroke="currentColor" strokeWidth={3} className="text-accent-400">
-          {/* 01 · Seed — symmetric acorn: dome cap, straight rim, tapered
-              body, vertical stem */}
-          <g>
-            <motion.path
-              d="M84 186 C84 200 91 210 100 215 C109 210 116 200 116 186"
-              {...draw(STAGE[0], 0.3)}
-            />
-            <motion.path
-              d="M80 186 C80 172 89 164 100 164 C111 164 120 172 120 186"
-              {...draw(STAGE[0] + 0.3, 0.25)}
-            />
-            <motion.path d="M78 186 L122 186" strokeWidth={2} {...draw(STAGE[0] + 0.55, 0.15)} />
-            <motion.path d="M100 164 L100 154" {...draw(STAGE[0] + 0.7, 0.15)} />
-          </g>
-
-          {/* 02 · Sprout — vertical stem, mirrored leaf pair, crown bud */}
-          <g>
-            <motion.path d="M300 206 L300 158" {...draw(STAGE[1], 0.3)} />
-            <motion.path
-              d="M300 178 C289 178 279 171 276 160 C287 160 297 167 300 178 Z"
-              {...draw(STAGE[1] + 0.3, 0.25)}
-            />
-            <motion.path
-              d="M300 178 C311 178 321 171 324 160 C313 160 303 167 300 178 Z"
-              {...draw(STAGE[1] + 0.55, 0.25)}
-            />
-            <motion.circle cx={300} cy={152} r={4} {...draw(STAGE[1] + 0.8, 0.2)} />
-          </g>
-
-          {/* 03 · Sapling — straight trunk, alternating leaf-tipped
-              branches, terminal leaf (same leaf language as the sprout) */}
-          <g>
-            <motion.path d="M500 194 L500 138" {...draw(STAGE[2], 0.25)} />
-            <motion.path d="M500 164 L486 150" {...draw(STAGE[2] + 0.25, 0.15)} />
-            <motion.path
-              d="M486 150 C477 150 470 144 468 135 C477 135 484 141 486 150 Z"
-              {...draw(STAGE[2] + 0.4, 0.2)}
-            />
-            <motion.path d="M500 150 L514 136" {...draw(STAGE[2] + 0.6, 0.15)} />
-            <motion.path
-              d="M514 136 C523 136 530 130 532 121 C523 121 516 127 514 136 Z"
-              {...draw(STAGE[2] + 0.75, 0.2)}
-            />
-            <motion.path
-              d="M500 138 C494 130 494 121 500 114 C506 121 506 130 500 138 Z"
-              {...draw(STAGE[2] + 0.95, 0.2)}
-            />
-          </g>
-
-          {/* 04 · Tree — the sapling fully grown: tall rooted trunk,
-              alternating leaf-tipped branches, terminal leaf, berries */}
-          <g>
-            <motion.path
-              d="M686 176 Q693 169 700 169 Q707 169 714 176"
-              strokeWidth={2.5}
-              {...draw(STAGE[3], 0.2)}
-            />
-            <motion.path d="M700 176 L700 96" {...draw(STAGE[3] + 0.2, 0.3)} />
-            <motion.path d="M700 152 L682 136" {...draw(STAGE[3] + 0.5, 0.1)} />
-            <motion.path
-              d="M682 136 C672 136 664 129 662 119 C672 119 680 126 682 136 Z"
-              {...draw(STAGE[3] + 0.6, 0.15)}
-            />
-            <motion.path d="M700 140 L718 124" {...draw(STAGE[3] + 0.75, 0.1)} />
-            <motion.path
-              d="M718 124 C728 124 736 117 738 107 C728 107 720 114 718 124 Z"
-              {...draw(STAGE[3] + 0.85, 0.15)}
-            />
-            <motion.path d="M700 124 L686 110" {...draw(STAGE[3] + 1, 0.1)} />
-            <motion.path
-              d="M686 110 C678 110 671 104 669 95 C678 95 685 101 686 110 Z"
-              {...draw(STAGE[3] + 1.1, 0.15)}
-            />
-            <motion.path d="M700 112 L712 100" {...draw(STAGE[3] + 1.25, 0.1)} />
-            <motion.path
-              d="M712 100 C721 100 728 93 730 84 C721 84 713 91 712 100 Z"
-              {...draw(STAGE[3] + 1.35, 0.15)}
-            />
-            <motion.path
-              d="M700 96 C693 87 693 77 700 69 C707 77 707 87 700 96 Z"
-              {...draw(STAGE[3] + 1.5, 0.2)}
-            />
-            {/* Berries among the branches — the payoff, one by one */}
-            <motion.circle cx={688} cy={146} r={3.5} className="fill-accent-400" stroke="none" {...pop(STAGE[3] + 1.7)} />
-            <motion.circle cx={714} cy={130} r={3.5} className="fill-brand-300" stroke="none" {...pop(STAGE[3] + 1.82)} />
-            <motion.circle cx={692} cy={116} r={3.5} className="fill-teal-300" stroke="none" {...pop(STAGE[3] + 1.94)} />
-          </g>
-        </g>
-      </svg>
-    </div>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
 /* Meet your instructor                                                        */
 /* -------------------------------------------------------------------------- */
 
@@ -1354,7 +1123,7 @@ function InstructorSection() {
   ];
 
   return (
-    // Bottom half of the navy band — picks up where JourneySection ends.
+    // Navy band between the demo video and the results section.
     <section id="instructor" className="relative overflow-hidden py-24 text-white">
       <div className="lp-orb lp-orb--b absolute -left-16 bottom-24 h-72 w-72 bg-brand-500/20" />
       <div className="lp-orb lp-orb--a absolute -right-20 top-16 h-80 w-80 bg-accent-500/15" />

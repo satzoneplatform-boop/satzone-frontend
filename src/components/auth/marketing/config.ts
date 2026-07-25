@@ -31,7 +31,7 @@ export const instructor: InstructorConfig = {
   promiseKey: 'auth.brand.instructor.promise',
   photoAltKey: 'auth.brand.instructor.photoAlt',
   photoUrl: '/assets/instructors/instructor.jpg',
-  initials: 'DK',
+  initials: 'QI',
 };
 
 export interface StatConfig {

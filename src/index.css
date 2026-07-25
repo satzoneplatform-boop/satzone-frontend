@@ -257,6 +257,12 @@
   to   { stroke-dashoffset: 0; }
 }
 
+/* Rocket exhaust flicker — scales from the nozzle end. */
+@keyframes lp-flame-flicker {
+  from { transform: scaleX(0.65); }
+  to   { transform: scaleX(1.12); }
+}
+
 /* Tiny star that blinks in and out. */
 @keyframes lp-twinkle {
   0%,
@@ -423,6 +429,12 @@
   .lp-growth-pulse {
     stroke-dasharray: 7 93;
     animation: lp-dash-travel 6s linear infinite;
+  }
+  /* Rocket exhaust: rapid alternate flicker (transform-box keeps it local). */
+  .lp-rocket-flame {
+    transform-box: fill-box;
+    transform-origin: 100% 50%;
+    animation: lp-flame-flicker 0.16s ease-in-out infinite alternate;
   }
 
   /* ---- Instructor photo: neon line circling the frame ------------------ */

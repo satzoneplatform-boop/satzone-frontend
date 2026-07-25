@@ -869,7 +869,7 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   // Summit band — the mountain-climb visual under the hero
   'landing.summit.title': 'Достигните балла мечты',
   'landing.summit.subtitle':
-    'От первого пробного теста до дня экзамена — каждое занятие поднимает вас на шаг выше.',
+    'От первого пробного теста до дня экзамена — каждое занятие приближает вас к целевому баллу.',
   // Demo band — the MacBook video player
   'landing.demo.title': 'Посмотрите SATZONE в действии',
   'landing.demo.subtitle':
@@ -912,16 +912,6 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'landing.steps.s2.body': 'Проходите ежедневные уроки и практические наборы, настроенные под ваши цели, — прогресс сохраняется автоматически.',
   'landing.steps.s3.title': 'Тестируйтесь и растите',
   'landing.steps.s3.body': 'Сдавайте полноформатные пробные тесты, разбирайте аналитику и наблюдайте, как растёт ваш прогнозируемый балл.',
-  'landing.journey.title': 'Ваш путь от жёлудя до вершины',
-  'landing.journey.subtitle': 'Структурированная прогрессия, которая укрепляет дисциплину на каждом этапе — без догадок и потерянных часов.',
-  'landing.journey.j1.title': 'Учитесь',
-  'landing.journey.j1.body': 'Осваивайте каждую тему в коротких модульных уроках по математике и Reading & Writing.',
-  'landing.journey.j2.title': 'Практикуйтесь',
-  'landing.journey.j2.body': 'Оттачивайте навыки на тысячах вопросов экзаменационного формата с мгновенными подробными разборами.',
-  'landing.journey.j3.title': 'Готовьтесь',
-  'landing.journey.j3.body': 'Сдавайте полноформатные пробные тесты с таймером, повторяющие настоящий Digital SAT — вместе с экзаменационным давлением.',
-  'landing.journey.j4.title': 'Достигайте',
-  'landing.journey.j4.body': 'Следите за ростом балла, закрывайте слабые места и приходите на экзамен с полной уверенностью.',
   'landing.testimonials.title': 'Реальные ученики, реальный рост баллов',
   'landing.testimonials.subtitle': 'Фото, результаты и истории учеников, которые системно работали.',
   'landing.testimonials.score': 'Итоговый балл',
@@ -955,10 +945,8 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'landing.results.prev': 'Предыдущий ученик',
   'landing.results.next': 'Следующий ученик',
   'landing.results.empty': 'Новые истории успеха уже в пути — загляните позже.',
-  'landing.results.error': 'Не удалось загрузить результаты.',
-  'landing.results.retry': 'Повторить',
   'landing.results.overall': 'Общий балл SAT',
-  'landing.results.country': 'Страна',
+  'landing.results.country': 'Регион',
   'landing.results.acceptance': 'Поступление',
   'landing.results.before': 'Math до',
   'landing.results.after': 'Math после',
@@ -968,7 +956,7 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'landing.instructor.eyebrow': 'Ваш преподаватель',
   'landing.instructor.title': 'Учитесь у того, кто уже прошёл этот путь.',
   'landing.instructor.bio':
-    'Дониёр помогает целеустремлённым ученикам превращать сложные темы SAT Math в понятные, повторяемые стратегии. Его уроки сочетают ясное объяснение, практику под руководством и честную обратную связь — вы понимаете не только ответ, но и ход решения.',
+    'Киличбек помогает целеустремлённым ученикам превращать сложные темы SAT Math в понятные, повторяемые стратегии. Его уроки сочетают ясное объяснение, практику под руководством и честную обратную связь — вы понимаете не только ответ, но и ход решения.',
   'landing.instructor.badge': 'Ведущий преподаватель',
   'landing.instructor.chip1': 'Специалист по Digital SAT Math',
   'landing.instructor.chip2': 'Пошаговые планы к целевому баллу',
@@ -985,10 +973,10 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'auth.brand.slogan3': 'Процентильный рейтинг среди учеников по всему Узбекистану',
   'auth.brand.slogan4': 'Официальный сертификат с проверкой по QR',
   // Auth marketing panel — instructor
-  'auth.brand.instructor.name': 'Дониёр Каримов',
+  'auth.brand.instructor.name': 'Киличбек Икромов',
   'auth.brand.instructor.role': 'Преподаватель SAT Math · опыт 2+ года',
   'auth.brand.instructor.promise': 'Довожу каждого ученика до целевого балла по чёткому пошаговому плану.',
-  'auth.brand.instructor.photoAlt': 'Дониёр Каримов, преподаватель SAT Math в SATZONE',
+  'auth.brand.instructor.photoAlt': 'Киличбек Икромов, преподаватель SAT Math в SATZONE',
   'auth.brand.instructor.label': 'Ваш преподаватель',
   // Auth marketing panel — stat labels (numbers come from config)
   'auth.brand.stat.students': 'учеников',

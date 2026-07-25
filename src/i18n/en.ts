@@ -900,7 +900,7 @@ export const en = {
   // Summit band — the mountain-climb visual under the hero
   'landing.summit.title': 'Reach your dream score',
   'landing.summit.subtitle':
-    'From your first mock to test day — every session is one step higher up the mountain.',
+    'From your first mock to test day — every session carries your score closer to touchdown.',
   // Demo band — the MacBook video player
   'landing.demo.title': 'See SATZONE in action',
   'landing.demo.subtitle':
@@ -951,16 +951,6 @@ export const en = {
   'landing.steps.s3.body': 'Sit full-length mock tests, review your analytics, and watch your projected score climb.',
 
   // Study journey — Learn → Practice → Prepare → Achieve
-  'landing.journey.title': 'Your path from acorn to achievement',
-  'landing.journey.subtitle': 'A structured progression that builds discipline at every stage — no guesswork, no wasted hours.',
-  'landing.journey.j1.title': 'Learn',
-  'landing.journey.j1.body': 'Master every concept with focused, modular lessons across Math and Reading & Writing.',
-  'landing.journey.j2.title': 'Practice',
-  'landing.journey.j2.body': 'Sharpen skills on thousands of exam-format questions with instant, detailed explanations.',
-  'landing.journey.j3.title': 'Prepare',
-  'landing.journey.j3.body': 'Sit full-length, timed mock tests that mirror the real Digital SAT — pressure and all.',
-  'landing.journey.j4.title': 'Achieve',
-  'landing.journey.j4.body': 'Track score growth, close weak spots, and walk in on test day with total confidence.',
 
   'landing.testimonials.title': 'Real students, real score growth',
   'landing.testimonials.subtitle': 'Photos, results, and stories from learners who put in the work.',
@@ -995,10 +985,8 @@ export const en = {
   'landing.results.prev': 'Previous student',
   'landing.results.next': 'Next student',
   'landing.results.empty': 'New success stories are on the way — check back soon.',
-  'landing.results.error': "We couldn't load results right now.",
-  'landing.results.retry': 'Try again',
   'landing.results.overall': 'Overall SAT',
-  'landing.results.country': 'Country',
+  'landing.results.country': 'Region',
   'landing.results.acceptance': 'Acceptance',
   'landing.results.before': 'Math before',
   'landing.results.after': 'Math after',
@@ -1010,7 +998,7 @@ export const en = {
   'landing.instructor.eyebrow': 'Meet your instructor',
   'landing.instructor.title': 'Learn with someone who knows the path.',
   'landing.instructor.bio':
-    'Doniyor helps ambitious students turn difficult SAT Math concepts into clear, repeatable strategies. His lessons combine focused explanation, guided practice, and honest feedback — so you understand both the answer and the reasoning behind it.',
+    'Qilichbek helps ambitious students turn difficult SAT Math concepts into clear, repeatable strategies. His lessons combine focused explanation, guided practice, and honest feedback — so you understand both the answer and the reasoning behind it.',
   'landing.instructor.badge': 'Lead instructor',
   'landing.instructor.chip1': 'Digital SAT Math specialist',
   'landing.instructor.chip2': 'Step-by-step score plans',
@@ -1027,10 +1015,10 @@ export const en = {
   'auth.brand.slogan3': 'Percentile ranking among students across Uzbekistan',
   'auth.brand.slogan4': 'An official certificate, verified by QR',
   // Auth marketing panel — instructor
-  'auth.brand.instructor.name': 'Doniyor Karimov',
+  'auth.brand.instructor.name': 'Qilichbek Ikromov',
   'auth.brand.instructor.role': 'SAT Math instructor · 2+ years experience',
   'auth.brand.instructor.promise': 'I get every student to their target score with a clear, step-by-step plan.',
-  'auth.brand.instructor.photoAlt': 'Doniyor Karimov, SATZONE SAT Math instructor',
+  'auth.brand.instructor.photoAlt': 'Qilichbek Ikromov, SATZONE SAT Math instructor',
   'auth.brand.instructor.label': 'Your instructor',
   // Auth marketing panel — stat labels (numbers come from config)
   'auth.brand.stat.students': 'students',

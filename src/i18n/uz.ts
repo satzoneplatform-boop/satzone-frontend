@@ -869,7 +869,7 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   // Summit band — the mountain-climb visual under the hero
   'landing.summit.title': 'Orzudagi ballga erishing',
   'landing.summit.subtitle':
-    'Birinchi sinov testidan imtihon kunigacha — har bir mashgʻulot sizni bir pogʻona yuqoriga koʻtaradi.',
+    'Birinchi sinov testidan imtihon kunigacha — har bir mashgʻulot sizni maqsad ballingizga yaqinlashtiradi.',
   // Demo band — the MacBook video player
   'landing.demo.title': 'SATZONEʼni amalda koʻring',
   'landing.demo.subtitle':
@@ -912,16 +912,6 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'landing.steps.s2.body': 'Maqsadlaringizga moslangan kundalik darslar va mashq toʻplamlarini bajaring — jarayon avtomatik saqlanadi.',
   'landing.steps.s3.title': 'Sinov topshiring va oʻsing',
   'landing.steps.s3.body': 'Toʻliq formatdagi sinov testlarini topshiring, tahlillarni oʻrganing va prognoz balingiz oʻsishini kuzating.',
-  'landing.journey.title': 'Yoʻlingiz: urugʻdan yutuqqacha',
-  'landing.journey.subtitle': 'Har bosqichda intizomni mustahkamlaydigan tuzilgan progressiya — taxminlarsiz, behuda soatlarsiz.',
-  'landing.journey.j1.title': 'Oʻrganing',
-  'landing.journey.j1.body': 'Matematika hamda Reading & Writing boʻyicha qisqa modulli darslar bilan har bir mavzuni puxta egallang.',
-  'landing.journey.j2.title': 'Mashq qiling',
-  'landing.journey.j2.body': 'Imtihon formatidagi minglab savollarda koʻnikmalaringizni charxlang — har biriga tezkor va batafsil izoh bilan.',
-  'landing.journey.j3.title': 'Tayyorlaning',
-  'landing.journey.j3.body': 'Haqiqiy Digital SATni aynan takrorlaydigan, vaqti oʻlchanadigan toʻliq sinov testlarini topshiring — bosimi bilan birga.',
-  'landing.journey.j4.title': 'Erishing',
-  'landing.journey.j4.body': 'Ball oʻsishini kuzating, zaif joylarni yoping va imtihon kuniga toʻliq ishonch bilan boring.',
   'landing.testimonials.title': 'Haqiqiy talabalar, haqiqiy ball o‘sishi',
   'landing.testimonials.subtitle': 'Mehnat qilgan o‘quvchilarning rasmlari, natijalari va hikoyalari.',
   'landing.testimonials.score': 'Yakuniy ball',
@@ -955,10 +945,8 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'landing.results.prev': 'Oldingi oʻquvchi',
   'landing.results.next': 'Keyingi oʻquvchi',
   'landing.results.empty': 'Yangi muvaffaqiyat hikoyalari yoʻlda — keyinroq qaytib koʻring.',
-  'landing.results.error': 'Natijalarni hozircha yuklab boʻlmadi.',
-  'landing.results.retry': 'Qayta urinish',
   'landing.results.overall': 'Umumiy SAT',
-  'landing.results.country': 'Davlat',
+  'landing.results.country': 'Viloyat',
   'landing.results.acceptance': 'Qabul',
   'landing.results.before': 'Math oldin',
   'landing.results.after': 'Math keyin',
@@ -968,7 +956,7 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'landing.instructor.eyebrow': 'Instruktoringiz bilan tanishing',
   'landing.instructor.title': 'Bu yoʻlni bosib oʻtgan ustozdan oʻrganing.',
   'landing.instructor.bio':
-    'Doniyor intiluvchan oʻquvchilarga SAT Math’ning murakkab mavzularini aniq va takrorlanadigan strategiyalarga aylantirishda yordam beradi. Darslari aniq tushuntirish, amaliyot va halol fikr-mulohazani birlashtiradi — siz javobni ham, yechim mantigʻini ham tushunasiz.',
+    'Qilichbek intiluvchan oʻquvchilarga SAT Math’ning murakkab mavzularini aniq va takrorlanadigan strategiyalarga aylantirishda yordam beradi. Darslari aniq tushuntirish, amaliyot va halol fikr-mulohazani birlashtiradi — siz javobni ham, yechim mantigʻini ham tushunasiz.',
   'landing.instructor.badge': 'Bosh instruktor',
   'landing.instructor.chip1': 'Digital SAT Math boʻyicha mutaxassis',
   'landing.instructor.chip2': 'Maqsadli ballgacha bosqichma-bosqich reja',
@@ -985,10 +973,10 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'auth.brand.slogan3': 'Oʻzbekistondagi oʻquvchilar orasida foizli reyting',
   'auth.brand.slogan4': 'QR orqali tekshiriladigan rasmiy sertifikat',
   // Auth marketing panel — instructor
-  'auth.brand.instructor.name': 'Doniyor Karimov',
+  'auth.brand.instructor.name': 'Qilichbek Ikromov',
   'auth.brand.instructor.role': 'SAT Math instruktori · 2+ yil tajriba',
   'auth.brand.instructor.promise': 'Har bir oʻquvchini aniq, bosqichma-bosqich reja bilan maqsadli balliga olib chiqaman.',
-  'auth.brand.instructor.photoAlt': 'Doniyor Karimov, SATZONE SAT Math instruktori',
+  'auth.brand.instructor.photoAlt': 'Qilichbek Ikromov, SATZONE SAT Math instruktori',
   'auth.brand.instructor.label': 'Sizning instruktoringiz',
   // Auth marketing panel — stat labels (numbers come from config)
   'auth.brand.stat.students': 'oʻquvchi',
