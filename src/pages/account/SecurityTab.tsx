@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
@@ -16,9 +16,7 @@ import type { TranslationKey } from '@/i18n/en';
 
 export function SecurityTab() {
   const t = useT();
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const sessions = useQuery({
     queryKey: ['me', 'sessions'],
     queryFn: () => meApi.listSessions(),
@@ -40,65 +38,30 @@ export function SecurityTab() {
     setParams(next, { replace: true });
   }, [params, user, setParams]);
 
-  const revokeOne = useMutation({
-    mutationFn: (id: string) => meApi.revokeSession(id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['me', 'sessions'] }),
-  });
-  // "Sign out everywhere" revokes every refresh token — including this
-  // device's. Access JWTs are stateless and outlive revocation by up to
-  // 15 minutes, so we must end the local session ourselves instead of
-  // letting the app silently die at the next token refresh.
-  const revokeAll = useMutation({
-    mutationFn: () => meApi.revokeAllSessions(),
-    onSuccess: async () => {
-      await logout();
-      navigate('/sign-in', { replace: true });
-    },
-  });
-
   return (
     <div className="space-y-6">
       <header>
         <h2 className="text-base font-semibold text-ink-900">{t('account.security.title')}</h2>
       </header>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <SecurityCard
-          title={t('account.security.password.title')}
-          description={
-            hasPassword
-              ? t('account.security.password.description')
-              : t('account.security.password.setDescription')
-          }
-          ctaLabel={
-            hasPassword
-              ? t('account.security.password.cta')
-              : t('account.security.password.setCta')
-          }
-          onClick={() => setPwOpen(true)}
-        />
-        <SecurityCard
-          title={t('account.security.twoFactor.title')}
-          description={t('account.security.twoFactor.description')}
-          ctaLabel={t('account.security.twoFactor.cta')}
-          disabled
-          ctaVariant="primary"
-        />
-      </div>
+      <SecurityCard
+        title={t('account.security.password.title')}
+        description={
+          hasPassword
+            ? t('account.security.password.description')
+            : t('account.security.password.setDescription')
+        }
+        ctaLabel={
+          hasPassword
+            ? t('account.security.password.cta')
+            : t('account.security.password.setCta')
+        }
+        onClick={() => setPwOpen(true)}
+      />
 
       <section className="rounded-2xl border border-ink-200 bg-white shadow-[var(--shadow-card)]">
         <header className="border-b border-ink-100 px-5 py-4">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <h3 className="text-base font-semibold text-ink-900">{t('account.security.activeSessions')}</h3>
-            <button
-              type="button"
-              onClick={() => revokeAll.mutate()}
-              disabled={revokeAll.isPending || sessions.isLoading}
-              className="inline-flex min-h-11 items-center rounded-lg px-2 text-sm font-medium text-danger-600 hover:underline disabled:cursor-not-allowed disabled:text-ink-400"
-            >
-              {revokeAll.isPending ? t('account.security.signingOut') : t('account.security.signOutAll')}
-            </button>
-          </div>
+          <h3 className="text-base font-semibold text-ink-900">{t('account.security.activeSessions')}</h3>
           <p className="mt-1 max-w-prose text-xs text-ink-500">{t('account.security.sessionsHint')}</p>
         </header>
 
@@ -127,12 +90,7 @@ export function SecurityTab() {
             {/* Card list at <sm keeps rows readable without sideways scroll. */}
             <ul className="divide-y divide-ink-100 sm:hidden">
               {sessions.data!.map((s) => (
-                <SessionCard
-                  key={s.id}
-                  session={s}
-                  onRevoke={() => revokeOne.mutate(s.id)}
-                  busy={revokeOne.isPending}
-                />
+                <SessionCard key={s.id} session={s} />
               ))}
             </ul>
             <div className="hidden overflow-x-auto sm:block">
@@ -142,17 +100,11 @@ export function SecurityTab() {
                     <th className="px-5 py-3 text-left font-medium">{t('account.security.col.device')}</th>
                     <th className="px-5 py-3 text-left font-medium">{t('account.security.col.location')}</th>
                     <th className="px-5 py-3 text-left font-medium">{t('account.security.col.lastActive')}</th>
-                    <th className="px-5 py-3" />
                   </tr>
                 </thead>
                 <tbody>
                   {sessions.data!.map((s) => (
-                    <SessionRow
-                      key={s.id}
-                      session={s}
-                      onRevoke={() => revokeOne.mutate(s.id)}
-                      busy={revokeOne.isPending}
-                    />
+                    <SessionRow key={s.id} session={s} />
                   ))}
                 </tbody>
               </table>
@@ -201,15 +153,7 @@ function SecurityCard({
   );
 }
 
-function SessionRow({
-  session,
-  onRevoke,
-  busy,
-}: {
-  session: SessionRead;
-  onRevoke: () => void;
-  busy: boolean;
-}) {
+function SessionRow({ session }: { session: SessionRead }) {
   const t = useT();
   const ua = session.user_agent ?? t('account.security.unknown');
   // Snapshot the clock once per row mount — Date.now() is impure and must
@@ -225,54 +169,26 @@ function SessionRow({
           {isRecent ? t('account.security.activeNow') : relativeTime(session.created_at, t)}
         </Badge>
       </td>
-      <td className="px-5 py-1.5 text-right">
-        <button
-          type="button"
-          onClick={onRevoke}
-          disabled={busy}
-          className="inline-flex min-h-11 items-center rounded-lg px-2 text-xs font-medium text-danger-600 hover:underline disabled:opacity-50"
-        >
-          {t('account.security.revoke')}
-        </button>
-      </td>
     </tr>
   );
 }
 
 /** Stacked session row for narrow screens (<sm). */
-function SessionCard({
-  session,
-  onRevoke,
-  busy,
-}: {
-  session: SessionRead;
-  onRevoke: () => void;
-  busy: boolean;
-}) {
+function SessionCard({ session }: { session: SessionRead }) {
   const t = useT();
   const ua = session.user_agent ?? t('account.security.unknown');
   // Same lazy clock snapshot as SessionRow — impure Date.now() runs once.
   const [now] = useState(() => Date.now());
   const isRecent = now - new Date(session.created_at).getTime() < 60 * 60 * 1000;
   return (
-    <li className="flex items-center justify-between gap-3 px-5 py-3">
-      <div className="min-w-0">
-        <p className="truncate text-sm font-medium text-ink-900">{shortBrowser(ua, t)}</p>
-        <p className="mt-0.5 truncate text-xs text-ink-500">{session.ip_address ?? '—'}</p>
-        <div className="mt-1.5">
-          <Badge tone={isRecent ? 'success' : 'neutral'}>
-            {isRecent ? t('account.security.activeNow') : relativeTime(session.created_at, t)}
-          </Badge>
-        </div>
+    <li className="px-5 py-3">
+      <p className="truncate text-sm font-medium text-ink-900">{shortBrowser(ua, t)}</p>
+      <p className="mt-0.5 truncate text-xs text-ink-500">{session.ip_address ?? '—'}</p>
+      <div className="mt-1.5">
+        <Badge tone={isRecent ? 'success' : 'neutral'}>
+          {isRecent ? t('account.security.activeNow') : relativeTime(session.created_at, t)}
+        </Badge>
       </div>
-      <button
-        type="button"
-        onClick={onRevoke}
-        disabled={busy}
-        className="inline-flex min-h-11 shrink-0 items-center rounded-lg px-2 text-xs font-medium text-danger-600 hover:underline disabled:opacity-50"
-      >
-        {t('account.security.revoke')}
-      </button>
     </li>
   );
 }
