@@ -217,7 +217,13 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
       // if MANIFEST_PARSED fires but FRAG_BUFFERED never does, the media
       // pipeline (decrypt/transmux) is the culprit, not the network.
       hls.on(Hls.Events.MANIFEST_PARSED, (_, data) => {
-        console.info('[lesson-player] manifest parsed — levels:', data.levels?.length);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const lvl: any = data.levels?.[0];
+        console.info('[lesson-player] manifest parsed — levels:', data.levels?.length, {
+          audioCodec: lvl?.audioCodec,
+          videoCodec: lvl?.videoCodec,
+          codecs: lvl?.attrs?.CODECS,
+        });
       });
       let buffered = 0;
       hls.on(Hls.Events.FRAG_BUFFERED, () => {
@@ -256,6 +262,18 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
           fatal: data.fatal,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           httpCode: (data as any).response?.code,
+          // Nested detail for append/codec failures: the browser SourceBuffer
+          // rejection carries the real reason here, not on `video.error`.
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          errName: (data as any).error?.name ?? (data as any).err?.name,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          errMessage: (data as any).error?.message ?? (data as any).err?.message,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          sourceBufferName: (data as any).sourceBufferName,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          parent: (data as any).parent,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          mimeType: (data as any).mimeType,
         });
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
