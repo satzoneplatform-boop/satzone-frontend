@@ -33,7 +33,7 @@ import { cn } from '@/lib/cn';
 /**
  * Public marketing landing page shown at `/`.
  *
- * Rebuilt for the SATZONE brand: deep-navy hero with animated gradient mesh,
+ * Rebuilt for the SAT Zone brand: deep-navy hero with animated gradient mesh,
  * an animated SAT score dashboard, count-up proof metrics, a rocket-flown
  * score climb over the three steps, instructor spotlight, and repo-managed
  * student results. Authed users redirect to the dashboard.

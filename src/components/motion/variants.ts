@@ -1,7 +1,7 @@
 import type { Transition, Variants } from 'motion/react';
 
 /**
- * Shared motion language for SATZONE.
+ * Shared motion language for SAT Zone.
  *
  * One easing curve and a small set of durations keep every animation feeling
  * like it belongs to the same premium product. Durations sit in the

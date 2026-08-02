@@ -28,7 +28,7 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'account.tabs.preferences': 'Настройки',
   'account.tabs.promocodes': 'Промокоды',
   'account.tabs.security': 'Безопасность',
-  'account.profile.signOut': 'Выйти из SATZONE',
+  'account.profile.signOut': 'Выйти из SAT Zone',
   'account.profile.removePhoto': 'Удалить фото',
   'account.profile.workPreferences': 'Учебный профиль',
   'account.profile.currentJobTitle': 'О себе',
@@ -172,7 +172,7 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'account.language.proficiency.description': 'Помогает рекомендовать курсы подходящего уровня.',
 
   // Account → profile sidebar
-  'account.profile.learnerFallback': 'Ученик SATZONE',
+  'account.profile.learnerFallback': 'Ученик SAT Zone',
   'account.profile.hoursShort': '{n}ч',
   'account.profile.notSet': 'Пока не указано',
   'account.profile.noInterests': 'Выберите интересы во вкладке «Предпочтения», чтобы получать персональные рекомендации.',
@@ -185,7 +185,7 @@ export const ru: Partial<Record<TranslationKey, string>> = {
 
   // Auth
   'auth.signUp.title': 'Давайте начнём',
-  'auth.signUp.subtitle': 'Создайте бесплатный аккаунт SATZONE или войдите, если он у вас уже есть.',
+  'auth.signUp.subtitle': 'Создайте бесплатный аккаунт SAT Zone или войдите, если он у вас уже есть.',
   'auth.signUp.continueWithGoogle': 'Регистрация через Google',
   'auth.signUp.orWithEmail': 'Или зарегистрируйтесь через email',
   'auth.signUp.continue': 'Продолжить',
@@ -207,7 +207,7 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'auth.signIn.noAccount': 'Нет аккаунта?',
   'auth.signIn.signUp': 'Зарегистрироваться',
   'auth.signIn.rememberMe': 'Запомнить меня',
-  'auth.signIn.welcome': 'Добро пожаловать в SATZONE',
+  'auth.signIn.welcome': 'Добро пожаловать в SAT Zone',
   'auth.signIn.welcomeSubtitle': 'Войдите с помощью аккаунта и пароля или создайте новый.',
   'auth.signIn.emailPlaceholder': 'Введите ваш email',
   'auth.signIn.passwordPlaceholder': 'Введите ваш пароль',
@@ -245,7 +245,7 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'auth.resetSuccess.login': 'Войти снова',
   'auth.forgot.title': 'Забыли пароль?',
   'auth.forgot.subtitle':
-    'Введите email, который вы используете в SATZONE. Мы отправим ссылку для сброса пароля.',
+    'Введите email, который вы используете в SAT Zone. Мы отправим ссылку для сброса пароля.',
   'auth.forgot.submit': 'Сбросить пароль',
   'auth.forgot.back': 'Назад ко входу',
   'auth.emailSent.title': 'Письмо отправлено',
@@ -333,7 +333,7 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'dashboard.recs.prev': 'Предыдущие рекомендации',
   'dashboard.recs.next': 'Следующие рекомендации',
   'dashboard.recs.free': 'Бесплатно',
-  'dashboard.recs.instructorFallback': 'Преподаватель SATZONE',
+  'dashboard.recs.instructorFallback': 'Преподаватель SAT Zone',
 
   // Analytics / progress page
   'analytics.title': 'Ваш прогресс SAT',
@@ -464,7 +464,7 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'learning.myLearnings.lastModified': 'Последнее изменение',
   'learning.myLearnings.completedBadge': 'Завершён',
   'learning.myLearnings.continueBadge': 'Продолжить',
-  'learning.myLearnings.defaultInstructor': 'Преподаватель SATZONE',
+  'learning.myLearnings.defaultInstructor': 'Преподаватель SAT Zone',
   'learning.myLearnings.noMatches': 'Курсов, подходящих под этот фильтр, нет.',
   'learning.myLearnings.exploreLink': 'Перейти к курсам',
   'learning.myLearnings.savedTitle': 'Сохранённые курсы хранятся в избранном.',
@@ -496,7 +496,7 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'learning.courseComplete.body1':
     'Вы полностью прошли курс «{course}» — каждый урок, от первого до последнего. Именно из такого упорства складываются высокие результаты.',
   'learning.courseComplete.body2':
-    'Спасибо, что учитесь вместе с SATZONE. Мы гордимся вашей работой и от всей души желаем удачи в учёбе и в жизни. Продолжайте — это только начало.',
+    'Спасибо, что учитесь вместе с SAT Zone. Мы гордимся вашей работой и от всей души желаем удачи в учёбе и в жизни. Продолжайте — это только начало.',
   'learning.courseComplete.quote1':
     'Образование — самое мощное оружие, с помощью которого можно изменить мир.',
   'learning.courseComplete.quote1Author': 'Нельсон Мандела, лауреат Нобелевской премии мира',
@@ -509,7 +509,7 @@ export const ru: Partial<Record<TranslationKey, string>> = {
     'Успех — это сумма небольших усилий, повторяемых изо дня в день.',
   'learning.courseComplete.quote4Author': 'Роберт Кольер, писатель',
   'learning.courseComplete.signoff': 'С гордостью и благодарностью,',
-  'learning.courseComplete.team': 'Команда SATZONE',
+  'learning.courseComplete.team': 'Команда SAT Zone',
   'learning.courseComplete.back': 'К моим курсам',
   'learning.courseComplete.close': 'Закрыть',
 
@@ -641,7 +641,7 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'checkout.expiredDate': 'Срок действия',
   'checkout.cvv': 'CVV',
   'checkout.cvvPlaceholder': 'Введите код',
-  'checkout.cardNote': 'Предоставляя данные карты, вы разрешаете SATZONE, Inc. списывать средства с карты для будущих платежей в соответствии с их условиями.',
+  'checkout.cardNote': 'Предоставляя данные карты, вы разрешаете SAT Zone, Inc. списывать средства с карты для будущих платежей в соответствии с их условиями.',
   'checkout.dismiss': 'Закрыть',
   'checkout.billing': 'Биллинг',
   'checkout.firstName': 'Имя',
@@ -854,7 +854,7 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'landing.hero.bullet3': 'Аналитика баллов',
   'landing.hero.titleLine1': 'Освой SAT.',
   'landing.hero.titleLine2': 'Управляй своим будущим.',
-  'landing.nav.homeAria': 'Главная SATZONE',
+  'landing.nav.homeAria': 'Главная SAT Zone',
   'landing.hero.trendCaption': 'Динамика балла · последние 8 недель',
   'landing.hero.subjectMath': 'Математика',
   'landing.hero.subjectRW': 'Чтение и письмо',
@@ -871,7 +871,7 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'landing.summit.subtitle':
     'От первого пробного теста до дня экзамена — каждое занятие приближает вас к целевому баллу.',
   // Demo band — the MacBook video player
-  'landing.demo.title': 'Посмотрите SATZONE в действии',
+  'landing.demo.title': 'Посмотрите SAT Zone в действии',
   'landing.demo.subtitle':
     'Короткая экскурсия по платформе — уроки, пробные тесты и аналитика, которая ведёт ваш план.',
   'landing.demo.play': 'Смотреть демо',
@@ -924,17 +924,17 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'landing.testimonials.q1.initials': 'АК',
   'landing.testimonials.q1.author': 'Азиза К.',
   'landing.testimonials.q1.role': 'SAT 1480 · Ташкент',
-  'landing.testimonials.q1.photoAlt': 'Азиза К., ученица SATZONE с результатом SAT 1480',
+  'landing.testimonials.q1.photoAlt': 'Азиза К., ученица SAT Zone с результатом SAT 1480',
   'landing.testimonials.q2.body': 'Я мог подстраивать уроки под свой график, а последовательная блокировка держала в дисциплине. Закончил курс за 6 недель.',
   'landing.testimonials.q2.initials': 'ДМ',
   'landing.testimonials.q2.author': 'Джамшид М.',
   'landing.testimonials.q2.role': 'SAT 1450 · Самарканд',
-  'landing.testimonials.q2.photoAlt': 'Джамшид М., ученик SATZONE с результатом SAT 1450',
+  'landing.testimonials.q2.photoAlt': 'Джамшид М., ученик SAT Zone с результатом SAT 1450',
   'landing.testimonials.q3.body': 'Обратная связь от преподавателя по тестам — то, чего не хватало на других платформах. Это меняет всё.',
   'landing.testimonials.q3.initials': 'НР',
   'landing.testimonials.q3.author': 'Нодира Р.',
   'landing.testimonials.q3.role': 'SAT 1520 · Бухара',
-  'landing.testimonials.q3.photoAlt': 'Нодира Р., ученица SATZONE с результатом SAT 1520',
+  'landing.testimonials.q3.photoAlt': 'Нодира Р., ученица SAT Zone с результатом SAT 1520',
 
   // Meet your instructor
   'landing.results.eyebrow': 'Результаты',
@@ -950,7 +950,7 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'landing.results.empty': 'Новые истории успеха уже в пути — загляните позже.',
   'landing.results.overall': 'Общий балл SAT',
   'landing.results.country': 'Регион',
-  'landing.results.photoAlt': '{name}, ученик SATZONE',
+  'landing.results.photoAlt': '{name}, ученик SAT Zone',
   'landing.instructor.eyebrow': 'Ваш преподаватель',
   'landing.instructor.title': 'Учитесь у того, кто уже прошёл этот путь.',
   'landing.instructor.bio':
@@ -974,7 +974,7 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'auth.brand.instructor.name': 'Киличбек Икромов',
   'auth.brand.instructor.role': 'Преподаватель SAT Math · опыт 2+ года',
   'auth.brand.instructor.promise': 'Довожу каждого ученика до целевого балла по чёткому пошаговому плану.',
-  'auth.brand.instructor.photoAlt': 'Киличбек Икромов, преподаватель SAT Math в SATZONE',
+  'auth.brand.instructor.photoAlt': 'Киличбек Икромов, преподаватель SAT Math в SAT Zone',
   'auth.brand.instructor.label': 'Ваш преподаватель',
   // Auth marketing panel — stat labels (numbers come from config)
   'auth.brand.stat.students': 'учеников',
@@ -1005,7 +1005,7 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'landing.cta.button': 'Начать подготовку',
   'landing.footer.tagline': 'Освой SAT. Управляй своим будущим.',
   'landing.footer.contacts': 'Связаться с нами',
-  'landing.footer.copyright': '© 2026 SATZONE. Все права защищены.',
+  'landing.footer.copyright': '© 2026 SAT Zone. Все права защищены.',
 
   // Telegram-верификация телефона
   'verifyPhone.title': 'Подтверждение через Telegram',
@@ -1038,7 +1038,7 @@ export const ru: Partial<Record<TranslationKey, string>> = {
   'verifyPhone.codeResent': 'Новый код отправлен.',
   'verifyPhone.botFlowSubtitle':
     'Откройте наш Telegram-бот, поделитесь номером телефона и введите ниже код, который пришлёт бот.',
-  'verifyPhone.stepOpenBot': 'Откройте бот SATZONE и нажмите Start.',
+  'verifyPhone.stepOpenBot': 'Откройте бот SAT Zone и нажмите Start.',
   'verifyPhone.stepSharePhone':
     'Нажмите «Поделиться телефоном» в боте — Telegram отправит ваш номер.',
   'verifyPhone.stepEnterCode': 'Введите ниже код, который пришлёт бот.',

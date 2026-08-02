@@ -26,7 +26,7 @@ export const en = {
   'account.tabs.preferences': 'Preferences',
   'account.tabs.promocodes': 'Promo codes',
   'account.tabs.security': 'Security',
-  'account.profile.signOut': 'Sign out from SATZONE',
+  'account.profile.signOut': 'Sign out from SAT Zone',
   'account.profile.removePhoto': 'Remove photo',
   'account.profile.workPreferences': 'Study profile',
   'account.profile.currentJobTitle': 'About you',
@@ -170,7 +170,7 @@ export const en = {
   'account.language.proficiency.description': 'Helps us recommend courses at the right level.',
 
   // Account → profile sidebar
-  'account.profile.learnerFallback': 'SATZONE learner',
+  'account.profile.learnerFallback': 'SAT Zone learner',
   'account.profile.hoursShort': '{n}h',
   'account.profile.notSet': 'Not set yet',
   'account.profile.noInterests': 'Pick interests in Preferences to personalize your recommendations.',
@@ -183,7 +183,7 @@ export const en = {
 
   // Auth
   'auth.signUp.title': 'Let’s get started',
-  'auth.signUp.subtitle': 'Create your free SATZONE account or sign in if you already have one.',
+  'auth.signUp.subtitle': 'Create your free SAT Zone account or sign in if you already have one.',
   'auth.signUp.continueWithGoogle': 'Sign up with Google',
   'auth.signUp.orWithEmail': 'Or sign up with email',
   'auth.signUp.continue': 'Continue',
@@ -205,7 +205,7 @@ export const en = {
   'auth.signIn.noAccount': 'Don’t have an account?',
   'auth.signIn.signUp': 'Sign up',
   'auth.signIn.rememberMe': 'Remember me',
-  'auth.signIn.welcome': 'Welcome to SATZONE',
+  'auth.signIn.welcome': 'Welcome to SAT Zone',
   'auth.signIn.welcomeSubtitle': 'Login with your account and password or create a new account.',
   'auth.signIn.emailPlaceholder': 'Enter your email',
   'auth.signIn.passwordPlaceholder': 'Enter your password',
@@ -243,7 +243,7 @@ export const en = {
   'auth.resetSuccess.login': 'Sign in again',
   'auth.forgot.title': 'Forgot password?',
   'auth.forgot.subtitle':
-    'Enter the email address you use on SATZONE. We’ll send you a link to reset your password.',
+    'Enter the email address you use on SAT Zone. We’ll send you a link to reset your password.',
   'auth.forgot.submit': 'Reset password',
   'auth.forgot.back': 'Back to sign in',
   'auth.emailSent.title': 'Email has been sent',
@@ -344,7 +344,7 @@ export const en = {
   'dashboard.recs.prev': 'Previous recommendations',
   'dashboard.recs.next': 'Next recommendations',
   'dashboard.recs.free': 'Free',
-  'dashboard.recs.instructorFallback': 'SATZONE instructor',
+  'dashboard.recs.instructorFallback': 'SAT Zone instructor',
 
   // Explore
   'explore.hero.title': 'Explore SAT courses & programs',
@@ -425,7 +425,7 @@ export const en = {
   'learning.myLearnings.lastModified': 'Last Modified',
   'learning.myLearnings.completedBadge': 'Completed',
   'learning.myLearnings.continueBadge': 'Continue',
-  'learning.myLearnings.defaultInstructor': 'SATZONE instructor',
+  'learning.myLearnings.defaultInstructor': 'SAT Zone instructor',
   'learning.myLearnings.noMatches': 'No courses match this view yet.',
   'learning.myLearnings.exploreLink': 'Explore courses',
   'learning.myLearnings.savedTitle': 'Saved courses live in your wishlist.',
@@ -456,7 +456,7 @@ export const en = {
   'learning.courseComplete.body1':
     'You’ve just completed “{course}” — every lesson, from the first to the last. That kind of persistence is exactly what great results are built on.',
   'learning.courseComplete.body2':
-    'Thank you for learning with SATZONE. We’re proud of the work you’ve put in, and we wish you the very best of luck in your studies and in life. Keep going — this is only the beginning.',
+    'Thank you for learning with SAT Zone. We’re proud of the work you’ve put in, and we wish you the very best of luck in your studies and in life. Keep going — this is only the beginning.',
   'learning.courseComplete.quote1':
     'Education is the most powerful weapon which you can use to change the world.',
   'learning.courseComplete.quote1Author': 'Nelson Mandela, Nobel Peace Prize laureate',
@@ -469,7 +469,7 @@ export const en = {
     'Success is the sum of small efforts, repeated day in and day out.',
   'learning.courseComplete.quote4Author': 'Robert Collier, author',
   'learning.courseComplete.signoff': 'With pride and gratitude,',
-  'learning.courseComplete.team': 'The SATZONE Team',
+  'learning.courseComplete.team': 'The SAT Zone Team',
   'learning.courseComplete.back': 'Back to my courses',
   'learning.courseComplete.close': 'Close',
   'learning.lesson.videoFailed': 'Video packaging failed for this lesson — please contact the instructor.',
@@ -600,7 +600,7 @@ export const en = {
   'checkout.expiredDate': 'Expired date',
   'checkout.cvv': 'CVV',
   'checkout.cvvPlaceholder': 'Enter code',
-  'checkout.cardNote': 'By providing your card information, you allow SATZONE, Inc. to charge your card for future payments in accordance with their terms.',
+  'checkout.cardNote': 'By providing your card information, you allow SAT Zone, Inc. to charge your card for future payments in accordance with their terms.',
   'checkout.dismiss': 'Dismiss',
   'checkout.billing': 'Billing',
   'checkout.firstName': 'First name',
@@ -890,7 +890,7 @@ export const en = {
 
   'landing.hero.titleLine1': 'Master the SAT.',
   'landing.hero.titleLine2': 'Own Your Future.',
-  'landing.nav.homeAria': 'SATZONE home',
+  'landing.nav.homeAria': 'SAT Zone home',
 
   // Hero score card + proof metrics
   'landing.hero.scoreLabel': 'Projected SAT',
@@ -909,7 +909,7 @@ export const en = {
   'landing.summit.subtitle':
     'From your first mock to test day — every session carries your score closer to touchdown.',
   // Demo band — the MacBook video player
-  'landing.demo.title': 'See SATZONE in action',
+  'landing.demo.title': 'See SAT Zone in action',
   'landing.demo.subtitle':
     'A quick tour of the platform — lessons, mock tests, and the analytics that guide your plan.',
   'landing.demo.play': 'Watch the demo',
@@ -971,17 +971,17 @@ export const en = {
   'landing.testimonials.q1.initials': 'AK',
   'landing.testimonials.q1.author': 'Aziza K.',
   'landing.testimonials.q1.role': 'SAT 1480 · Tashkent',
-  'landing.testimonials.q1.photoAlt': 'Aziza K., SATZONE student with SAT 1480 result',
+  'landing.testimonials.q1.photoAlt': 'Aziza K., SAT Zone student with SAT 1480 result',
   'landing.testimonials.q2.body': 'I could fit lessons around my schedule, and the sequential lock kept me honest. Finished the whole course in 6 weeks.',
   'landing.testimonials.q2.initials': 'JM',
   'landing.testimonials.q2.author': 'Jamshid M.',
   'landing.testimonials.q2.role': 'SAT 1450 · Samarkand',
-  'landing.testimonials.q2.photoAlt': 'Jamshid M., SATZONE student with SAT 1450 result',
+  'landing.testimonials.q2.photoAlt': 'Jamshid M., SAT Zone student with SAT 1450 result',
   'landing.testimonials.q3.body': 'The instructor feedback on assessments was the part I missed in every other platform. Game changer.',
   'landing.testimonials.q3.initials': 'NR',
   'landing.testimonials.q3.author': 'Nodira R.',
   'landing.testimonials.q3.role': 'SAT 1520 · Bukhara',
-  'landing.testimonials.q3.photoAlt': 'Nodira R., SATZONE student with SAT 1520 result',
+  'landing.testimonials.q3.photoAlt': 'Nodira R., SAT Zone student with SAT 1520 result',
 
   // Results — university acceptances & SAT Math improvements (dynamic, CMS-managed)
   'landing.results.eyebrow': 'Results',
@@ -997,7 +997,7 @@ export const en = {
   'landing.results.empty': 'New success stories are on the way — check back soon.',
   'landing.results.overall': 'Overall SAT',
   'landing.results.country': 'Region',
-  'landing.results.photoAlt': '{name}, SATZONE student',
+  'landing.results.photoAlt': '{name}, SAT Zone student',
 
   // Meet your instructor
   'landing.instructor.eyebrow': 'Meet your instructor',
@@ -1023,7 +1023,7 @@ export const en = {
   'auth.brand.instructor.name': 'Qilichbek Ikromov',
   'auth.brand.instructor.role': 'SAT Math instructor · 2+ years experience',
   'auth.brand.instructor.promise': 'I get every student to their target score with a clear, step-by-step plan.',
-  'auth.brand.instructor.photoAlt': 'Qilichbek Ikromov, SATZONE SAT Math instructor',
+  'auth.brand.instructor.photoAlt': 'Qilichbek Ikromov, SAT Zone SAT Math instructor',
   'auth.brand.instructor.label': 'Your instructor',
   // Auth marketing panel — stat labels (numbers come from config)
   'auth.brand.stat.students': 'students',
@@ -1054,7 +1054,7 @@ export const en = {
   'landing.cta.button': 'Start Preparing',
   'landing.footer.tagline': 'Master the SAT. Own Your Future.',
   'landing.footer.contacts': 'Contact us',
-  'landing.footer.copyright': '© 2026 SATZONE. All rights reserved.',
+  'landing.footer.copyright': '© 2026 SAT Zone. All rights reserved.',
 
   // Telegram phone verification
   'verifyPhone.title': 'Verify via Telegram',
@@ -1087,7 +1087,7 @@ export const en = {
   'verifyPhone.codeResent': 'A new code has been sent.',
   'verifyPhone.botFlowSubtitle':
     'Open our Telegram bot, share your phone number, then enter the code it sends you below.',
-  'verifyPhone.stepOpenBot': 'Open the SATZONE bot and tap Start.',
+  'verifyPhone.stepOpenBot': 'Open the SAT Zone bot and tap Start.',
   'verifyPhone.stepSharePhone':
     'Tap “Share phone” in the bot — Telegram will forward your number.',
   'verifyPhone.stepEnterCode': 'Enter the code the bot sends you below.',

@@ -28,7 +28,7 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'account.tabs.preferences': 'Sozlamalar',
   'account.tabs.promocodes': 'Promokodlar',
   'account.tabs.security': 'Xavfsizlik',
-  'account.profile.signOut': 'SATZONEʼdan chiqish',
+  'account.profile.signOut': 'SAT Zoneʼdan chiqish',
   'account.profile.removePhoto': 'Rasmni olib tashlash',
   'account.profile.workPreferences': 'Oʻquv profili',
   'account.profile.currentJobTitle': 'Oʻzingiz haqingizda',
@@ -172,7 +172,7 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'account.language.proficiency.description': 'Mos darajadagi kurslarni tavsiya qilishga yordam beradi.',
 
   // Account → profile sidebar
-  'account.profile.learnerFallback': 'SATZONE oʻquvchisi',
+  'account.profile.learnerFallback': 'SAT Zone oʻquvchisi',
   'account.profile.hoursShort': '{n}s',
   'account.profile.notSet': 'Hali koʻrsatilmagan',
   'account.profile.noInterests': 'Shaxsiy tavsiyalar uchun «Sozlamalar» boʻlimida qiziqishlaringizni tanlang.',
@@ -185,7 +185,7 @@ export const uz: Partial<Record<TranslationKey, string>> = {
 
   // Auth
   'auth.signUp.title': 'Boshlaymizmi',
-  'auth.signUp.subtitle': 'Bepul SATZONE hisobini yarating yoki avvaldan hisobingiz bo‘lsa kiring.',
+  'auth.signUp.subtitle': 'Bepul SAT Zone hisobini yarating yoki avvaldan hisobingiz bo‘lsa kiring.',
   'auth.signUp.continueWithGoogle': 'Google bilan roʻyxatdan oʻtish',
   'auth.signUp.orWithEmail': 'Yoki email bilan roʻyxatdan oʻting',
   'auth.signUp.continue': 'Davom etish',
@@ -207,7 +207,7 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'auth.signIn.noAccount': 'Hisobingiz yo‘qmi?',
   'auth.signIn.signUp': 'Roʻyxatdan oʻtish',
   'auth.signIn.rememberMe': 'Meni eslab qol',
-  'auth.signIn.welcome': 'SATZONEʼga xush kelibsiz',
+  'auth.signIn.welcome': 'SAT Zoneʼga xush kelibsiz',
   'auth.signIn.welcomeSubtitle': 'Hisobingiz va parolingiz bilan kiring yoki yangi hisob yarating.',
   'auth.signIn.emailPlaceholder': 'Emailingizni kiriting',
   'auth.signIn.passwordPlaceholder': 'Parolingizni kiriting',
@@ -245,7 +245,7 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'auth.resetSuccess.login': 'Qayta kirish',
   'auth.forgot.title': 'Parolni unutdingizmi?',
   'auth.forgot.subtitle':
-    'SATZONEʼda ishlatadigan email manzilingizni kiriting. Parolni tiklash havolasini yuboramiz.',
+    'SAT Zoneʼda ishlatadigan email manzilingizni kiriting. Parolni tiklash havolasini yuboramiz.',
   'auth.forgot.submit': 'Parolni tiklash',
   'auth.forgot.back': 'Kirishga qaytish',
   'auth.emailSent.title': 'Xat yuborildi',
@@ -333,7 +333,7 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'dashboard.recs.prev': 'Oldingi tavsiyalar',
   'dashboard.recs.next': 'Keyingi tavsiyalar',
   'dashboard.recs.free': 'Bepul',
-  'dashboard.recs.instructorFallback': 'SATZONE oʻqituvchisi',
+  'dashboard.recs.instructorFallback': 'SAT Zone oʻqituvchisi',
 
   // Analytics / progress page
   'analytics.title': 'SAT boʻyicha progressingiz',
@@ -464,7 +464,7 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'learning.myLearnings.lastModified': 'Oxirgi oʻzgartirish',
   'learning.myLearnings.completedBadge': 'Tugatildi',
   'learning.myLearnings.continueBadge': 'Davom etish',
-  'learning.myLearnings.defaultInstructor': 'SATZONE ustozi',
+  'learning.myLearnings.defaultInstructor': 'SAT Zone ustozi',
   'learning.myLearnings.noMatches': 'Bu koʻrinishga mos kurs topilmadi.',
   'learning.myLearnings.exploreLink': 'Kurslarni koʻrish',
   'learning.myLearnings.savedTitle': 'Saqlangan kurslar saqlangan roʻyxatda.',
@@ -496,7 +496,7 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'learning.courseComplete.body1':
     'Siz “{course}” kursini toʻliq tamomladingiz — birinchi darsdan oxirgisigacha. Aynan shunday matonat yuqori natijalar poydevoridir.',
   'learning.courseComplete.body2':
-    'SATZONE bilan oʻqiganingiz uchun rahmat. Mehnatingiz bilan faxrlanamiz va oʻqishingizda hamda hayotingizda omad tilaymiz. Davom eting — bu hali boshlanishi.',
+    'SAT Zone bilan oʻqiganingiz uchun rahmat. Mehnatingiz bilan faxrlanamiz va oʻqishingizda hamda hayotingizda omad tilaymiz. Davom eting — bu hali boshlanishi.',
   'learning.courseComplete.quote1':
     'Taʼlim — dunyoni oʻzgartirish uchun ishlatish mumkin boʻlgan eng kuchli quroldir.',
   'learning.courseComplete.quote1Author': 'Nelson Mandela, Nobel tinchlik mukofoti sovrindori',
@@ -509,7 +509,7 @@ export const uz: Partial<Record<TranslationKey, string>> = {
     'Muvaffaqiyat — kun sayin takrorlanadigan kichik saʼy-harakatlar yigʻindisidir.',
   'learning.courseComplete.quote4Author': 'Robert Collier, yozuvchi',
   'learning.courseComplete.signoff': 'Faxr va minnatdorlik bilan,',
-  'learning.courseComplete.team': 'SATZONE jamoasi',
+  'learning.courseComplete.team': 'SAT Zone jamoasi',
   'learning.courseComplete.back': 'Kurslarimga qaytish',
   'learning.courseComplete.close': 'Yopish',
 
@@ -641,7 +641,7 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'checkout.expiredDate': 'Amal qilish muddati',
   'checkout.cvv': 'CVV',
   'checkout.cvvPlaceholder': 'Kodni kiriting',
-  'checkout.cardNote': 'Karta maʼlumotlaringizni taqdim etish orqali SATZONE, Inc. ga kelajakdagi toʻlovlar uchun kartangizdan yechish huquqini berasiz.',
+  'checkout.cardNote': 'Karta maʼlumotlaringizni taqdim etish orqali SAT Zone, Inc. ga kelajakdagi toʻlovlar uchun kartangizdan yechish huquqini berasiz.',
   'checkout.dismiss': 'Yopish',
   'checkout.billing': 'Hisob-kitob',
   'checkout.firstName': 'Ism',
@@ -854,7 +854,7 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'landing.hero.bullet3': 'Ball tahlili',
   'landing.hero.titleLine1': 'SATʼni egallang.',
   'landing.hero.titleLine2': 'Kelajagingizni boshqaring.',
-  'landing.nav.homeAria': 'SATZONE bosh sahifasi',
+  'landing.nav.homeAria': 'SAT Zone bosh sahifasi',
   'landing.hero.trendCaption': 'Ball dinamikasi · soʻnggi 8 hafta',
   'landing.hero.subjectMath': 'Matematika',
   'landing.hero.subjectRW': 'Oʻqish va yozish',
@@ -871,7 +871,7 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'landing.summit.subtitle':
     'Birinchi sinov testidan imtihon kunigacha — har bir mashgʻulot sizni maqsad ballingizga yaqinlashtiradi.',
   // Demo band — the MacBook video player
-  'landing.demo.title': 'SATZONEʼni amalda koʻring',
+  'landing.demo.title': 'SAT Zoneʼni amalda koʻring',
   'landing.demo.subtitle':
     'Platforma boʻylab qisqa sayohat — darslar, sinov testlari va rejangizni boshqaradigan tahlillar.',
   'landing.demo.play': 'Demoni koʻrish',
@@ -924,17 +924,17 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'landing.testimonials.q1.initials': 'AK',
   'landing.testimonials.q1.author': 'Aziza K.',
   'landing.testimonials.q1.role': 'SAT 1480 · Toshkent',
-  'landing.testimonials.q1.photoAlt': 'Aziza K., SATZONE o‘quvchisi, SAT 1480 natijasi',
+  'landing.testimonials.q1.photoAlt': 'Aziza K., SAT Zone o‘quvchisi, SAT 1480 natijasi',
   'landing.testimonials.q2.body': 'Darslarni jadvalimga moslab qila oldim, ketma-ket qulflash esa intizomli qoldirdi. Kursni 6 hafta ichida yakunladim.',
   'landing.testimonials.q2.initials': 'JM',
   'landing.testimonials.q2.author': 'Jamshid M.',
   'landing.testimonials.q2.role': 'SAT 1450 · Samarqand',
-  'landing.testimonials.q2.photoAlt': 'Jamshid M., SATZONE o‘quvchisi, SAT 1450 natijasi',
+  'landing.testimonials.q2.photoAlt': 'Jamshid M., SAT Zone o‘quvchisi, SAT 1450 natijasi',
   'landing.testimonials.q3.body': 'Baholash uchun oʻqituvchidan keladigan izoh boshqa platformalarda yetishmagan narsa edi. Hammasini oʻzgartirdi.',
   'landing.testimonials.q3.initials': 'NR',
   'landing.testimonials.q3.author': 'Nodira R.',
   'landing.testimonials.q3.role': 'SAT 1520 · Buxoro',
-  'landing.testimonials.q3.photoAlt': 'Nodira R., SATZONE o‘quvchisi, SAT 1520 natijasi',
+  'landing.testimonials.q3.photoAlt': 'Nodira R., SAT Zone o‘quvchisi, SAT 1520 natijasi',
 
   // Meet your instructor
   'landing.results.eyebrow': 'Natijalar',
@@ -950,7 +950,7 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'landing.results.empty': 'Yangi muvaffaqiyat hikoyalari yoʻlda — keyinroq qaytib koʻring.',
   'landing.results.overall': 'Umumiy SAT',
   'landing.results.country': 'Viloyat',
-  'landing.results.photoAlt': '{name}, SATZONE oʻquvchisi',
+  'landing.results.photoAlt': '{name}, SAT Zone oʻquvchisi',
   'landing.instructor.eyebrow': 'Instruktoringiz bilan tanishing',
   'landing.instructor.title': 'Bu yoʻlni bosib oʻtgan ustozdan oʻrganing.',
   'landing.instructor.bio':
@@ -974,7 +974,7 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'auth.brand.instructor.name': 'Qilichbek Ikromov',
   'auth.brand.instructor.role': 'SAT Math instruktori · 2+ yil tajriba',
   'auth.brand.instructor.promise': 'Har bir oʻquvchini aniq, bosqichma-bosqich reja bilan maqsadli balliga olib chiqaman.',
-  'auth.brand.instructor.photoAlt': 'Qilichbek Ikromov, SATZONE SAT Math instruktori',
+  'auth.brand.instructor.photoAlt': 'Qilichbek Ikromov, SAT Zone SAT Math instruktori',
   'auth.brand.instructor.label': 'Sizning instruktoringiz',
   // Auth marketing panel — stat labels (numbers come from config)
   'auth.brand.stat.students': 'oʻquvchi',
@@ -1005,7 +1005,7 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'landing.cta.button': 'Tayyorgarlikni boshlash',
   'landing.footer.tagline': 'SATʼni egallang. Kelajagingizni boshqaring.',
   'landing.footer.contacts': 'Biz bilan bogʻlanish',
-  'landing.footer.copyright': '© 2026 SATZONE. Barcha huquqlar himoyalangan.',
+  'landing.footer.copyright': '© 2026 SAT Zone. Barcha huquqlar himoyalangan.',
 
   // Telegram telefon tasdiqlash
   'verifyPhone.title': 'Telegram orqali tasdiqlash',
@@ -1038,7 +1038,7 @@ export const uz: Partial<Record<TranslationKey, string>> = {
   'verifyPhone.codeResent': 'Yangi kod yuborildi.',
   'verifyPhone.botFlowSubtitle':
     'Telegram botimizni oching, telefon raqamingizni yuboring va u yuborgan kodni quyida kiriting.',
-  'verifyPhone.stepOpenBot': 'SATZONE botini oching va Start tugmasini bosing.',
+  'verifyPhone.stepOpenBot': 'SAT Zone botini oching va Start tugmasini bosing.',
   'verifyPhone.stepSharePhone':
     'Botda “Telefonni yuborish” tugmasini bosing — Telegram raqamingizni botga jo‘natadi.',
   'verifyPhone.stepEnterCode': 'Bot yuborgan kodni quyida kiriting.',

@@ -86,7 +86,7 @@ export function CourseCompletionLetter({
             <div className="px-8 pt-8 sm:px-10">
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-semibold tracking-[0.2em] text-ink-400 uppercase">
-                  SATZONE
+                  SAT Zone
                 </span>
                 {/* Wax-seal nod — a small gold star medallion. */}
                 <span className="grid size-10 place-items-center rounded-full bg-warn-500/15 text-warn-600">

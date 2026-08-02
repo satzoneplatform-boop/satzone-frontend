@@ -6,11 +6,11 @@
 @import '@fontsource/poppins/700.css';
 
 @theme {
-  /* SATZONE brand typography — Poppins with sensible system fallbacks. */
+  /* SAT Zone brand typography — Poppins with sensible system fallbacks. */
   --font-sans: 'Poppins', 'Inter', 'Helvetica Neue', Arial, system-ui, sans-serif;
 
   /* ------------------------------------------------------------------ */
-  /* Brand — SATZONE "Primary Blue" #2563EB anchored at 600.            */
+  /* Brand — SAT Zone "Primary Blue" #2563EB anchored at 600.            */
   /* Token names are preserved from the previous theme so every page    */
   /* rebrands automatically; only the values change (purple → blue).    */
   /* ------------------------------------------------------------------ */
@@ -46,7 +46,7 @@
   --color-navy-900: #0d1b3d; /* Deep Blue */
   --color-navy-950: #081026;
 
-  /* Greyscale — slate ramp; already matches SATZONE Neutral Gray
+  /* Greyscale — slate ramp; already matches SAT Zone Neutral Gray
      (#64748B ≈ ink-500) and Light Gray (#F1F5F9 = ink-100). */
   --color-ink-0: #ffffff;
   --color-ink-50: #f8fafc;

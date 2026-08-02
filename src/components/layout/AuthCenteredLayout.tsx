@@ -18,7 +18,7 @@ interface AuthCenteredLayoutProps {
  *  - Reset password form
  *  - Reset success card
  *
- * Header has the SATZONE wordmark + locale switcher (slot).
+ * Header has the SAT Zone wordmark + locale switcher (slot).
  * Footer has © + legal links.
  */
 export function AuthCenteredLayout({
@@ -51,7 +51,7 @@ export function AuthCenteredLayout({
 
       {showFooter && (
         <footer className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-transparent px-4 py-5 text-sm text-ink-500 sm:px-8">
-          <span>© 2026 SATZONE</span>
+          <span>© 2026 SAT Zone</span>
           <div className="flex items-center gap-6">
             <a href="#" className="underline-offset-2 hover:underline">
               {t('auth.signUp.privacy')}

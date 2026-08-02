@@ -1,4 +1,4 @@
-# Claude Code Skills — SatZone project
+# Claude Code Skills — SAT Zone project
 
 This folder contains **skills**: reusable instruction packs that Claude Code loads
 when they're relevant to the task. Because they live inside the repo

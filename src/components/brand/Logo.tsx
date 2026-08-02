@@ -19,9 +19,9 @@ interface LogoProps {
 }
 
 /**
- * SATZONE brand lockup — official artwork from src/assets/logo.
+ * SAT Zone brand lockup — official artwork from src/assets/logo.
  *
- * `withWordmark` renders the full lockup (shield/acorn mark + SATZONE +
+ * `withWordmark` renders the full lockup (shield/acorn mark + SAT Zone +
  * tagline); otherwise just the mark. `variant="white"` swaps in the
  * dark-surface lockup (white wordmark) for navy backgrounds.
  */
@@ -42,7 +42,7 @@ export function Logo({
   return (
     <img
       src={variant === 'white' ? logoFullDark : logoFull}
-      alt="SATZONE"
+      alt="SAT Zone"
       style={{ height, width: Math.round(height * FULL_RATIO) }}
       className={cn('block shrink-0 select-none', className)}
       draggable={false}
@@ -66,7 +66,7 @@ export function LogoMark({
   return (
     <img
       src={logoMark}
-      alt="SATZONE"
+      alt="SAT Zone"
       style={{ height: size, width: Math.round(size * MARK_RATIO) }}
       className={cn('block shrink-0 select-none', className)}
       draggable={false}

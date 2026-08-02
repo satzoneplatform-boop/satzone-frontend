@@ -42,7 +42,7 @@ const SIZE_STYLES: Record<Size, string> = {
 };
 
 /**
- * Primary interactive button for SATZONE.
+ * Primary interactive button for SAT Zone.
  *
  * Adds a subtle lift on hover and a press "squish" on tap for a tactile,
  * premium feel — automatically disabled under prefers-reduced-motion and
